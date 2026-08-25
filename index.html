@@ -1,0 +1,257 @@
+<!doctype html>
+  <html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kobe Uploader Policies</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+
+  :root {
+        --bg: #f6f4ef;
+        --surface: #ffffff;
+        --ink: #262220;
+    --ink-soft: #5b564f;
+    --ink-faint: #8b857a;
+    --accent: #4f7391;
+    --accent-warm: #a65c3e;
+          --rule: #e4ddd0;
+          --rule-strong: #d5cbb8;
+      }
+
+  @media (prefers-color-scheme: dark) {
+          :root {
+      --bg: #1c1a17;
+      --surface: #242220;
+      --ink: #f3efe7;
+              --ink-soft: #cac3b6;
+              --ink-faint: #8f887c;
+      --accent: #8fb2cd;
+      --accent-warm: #d98b65;
+              --rule: #38342e;
+      --rule-strong: #454038;
+}
+}
+
+  * { box-sizing: border-box; }
+
+  body {
+        background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    margin: 0;
+    padding: 5rem 1.5rem 6rem;
+}
+
+  .page {
+        max-width: 680px;
+    margin: 0 auto;
+}
+
+  .eyebrow {
+        font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    margin: 0 0 0.9rem;
+}
+
+  h1 {
+        font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: clamp(2.1rem, 5vw, 2.75rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 1rem;
+}
+
+  .meta {
+        display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    margin: 0 0 3rem;
+    padding-bottom: 2.25rem;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .meta span strong {
+        color: var(--ink-soft);
+    font-weight: 600;
+}
+
+  .lede {
+        font-size: 1.08rem;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0 0 3.5rem;
+}
+
+  section + section {
+        margin-top: 3.5rem;
+    padding-top: 3.5rem;
+    border-top: 1px solid var(--rule);
+}
+
+  h2 {
+        font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    letter-spacing: -0.005em;
+    margin: 0 0 1.6rem;
+}
+
+  h3 {
+        font-family: 'Source Sans 3', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--ink);
+    margin: 2rem 0 0.6rem;
+}
+
+  p {
+        max-width: 65ch;
+    margin: 0 0 1.1rem;
+    color: var(--ink-soft);
+}
+
+  p strong { color: var(--ink); font-weight: 600; }
+
+  ul {
+        max-width: 62ch;
+    margin: 0 0 1.1rem;
+    padding-left: 1.3rem;
+    color: var(--ink-soft);
+}
+
+  li { margin-bottom: 0.45rem; }
+  li::marker { color: var(--accent); }
+
+  a {
+        color: var(--accent);
+    text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    text-underline-offset: 3px;
+}
+  a:hover { text-decoration-color: var(--accent); }
+  a:focus-visible {
+        outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+  .card {
+        background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 1.5rem 1.7rem;
+    margin: 1.4rem 0;
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+      footer {
+        margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.88rem;
+    color: var(--ink-faint);
+}
+
+  footer p { color: inherit; max-width: none; }
+</style>
+  </head>
+  <body>
+  <div class="page">
+    <p class="eyebrow">Kobe the Aussie &middot; Personal API Tool</p>
+  <h1>Terms of Service &amp; Privacy Policy</h1>
+  <div class="meta">
+    <span>Applies to: <strong>Kobe Aussie TikTok Uploader</strong></span>
+      <span>Effective: <strong>25 August 2026</strong></span>
+    </div>
+    <p class="lede">
+      This page covers a small personal-use tool that publishes videos to one TikTok
+    account, the account for Kobe, an Australian Shepherd, and his dog-trick content.
+      It is not a public product and is not offered to other users.
+    </p>
+
+    <section id="terms">
+      <h2>Terms of Service</h2>
+
+    <h3>What this is</h3>
+      <p>
+        The Kobe Aussie TikTok Uploader is a script operated solely by its developer to
+      publish pre-edited videos to a single TikTok account that the developer owns and
+      controls. It connects to TikTok only through TikTok's official Content Posting API.
+      </p>
+
+      <h3>Who can use it</h3>
+      <p>
+        Only the developer. This tool is not distributed, is not available for other
+      TikTok accounts to authorize, and has no signup flow for third parties.
+    </p>
+
+    <h3>What it does</h3>
+    <ul>
+        <li>Uploads a video file to the connected TikTok account.</li>
+      <li>Sets the post's caption, cover, and privacy setting at upload time.</li>
+        <li>Does not read, modify, or delete any other content on the account.</li>
+      </ul>
+
+      <h3>No warranty</h3>
+      <p>
+        Provided as-is, for personal use. The developer may change or discontinue the tool
+      at any time without notice.
+    </p>
+  </section>
+
+  <section id="privacy">
+    <h2>Privacy Policy</h2>
+
+      <h3>Data this tool touches</h3>
+    <p>
+      The only account data involved is the developer's own TikTok authorization token,
+        obtained through TikTok's standard OAuth flow and used exclusively to publish the
+        developer's own videos. The tool does not access, collect, or store data belonging
+        to any other TikTok user, viewer, or commenter.
+      </p>
+
+      <div class="card">
+        <p>
+          <strong>No third-party data collection.</strong> This tool has no users other
+        than its developer. It does not run analytics, does not sell or share data, and
+          does not have a database of visitors, followers, or viewers.
+        </p>
+      </div>
+
+      <h3>Where things are stored</h3>
+      <p>
+        Authorization tokens are stored locally on the developer's own machine, not on any
+      shared or third-party server. Video files are the developer's own edited footage.
+      </p>
+
+      <h3>Third parties</h3>
+      <p>
+        The only third party involved is TikTok itself, via its official API, under
+      TikTok's own <a href="https://www.tiktok.com/legal/page/row/privacy-policy/en">privacy
+        policy</a> and <a href="https://www.tiktok.com/legal/page/row/terms-of-service/en">terms
+        of service</a>.
+    </p>
+
+    <h3>Contact</h3>
+    <p>Questions about this tool can be directed to the developer via the connected TikTok account.</p>
+  </section>
+
+  <footer>
+    <p>Kobe the Aussie Shepherd &middot; personal content pipeline, not a commercial product.</p>
+    </footer>
+  </div>
+  </body>
+  </html>
+  
