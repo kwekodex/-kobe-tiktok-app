@@ -3,11 +3,11 @@
 
 /* default (idle) */
 .kobe .k-root { transform-origin: 100px 210px; animation: k-breathe 2.6s ease-in-out infinite; }
-.kobe .k-head { transform-origin: 100px 124px; animation: k-tilt 7s ease-in-out infinite; }
-.kobe .k-tail { transform-origin: 142px 176px; animation: k-wag 0.5s ease-in-out infinite alternate; }
-.kobe .k-ear-l { transform-origin: 62px 60px; animation: k-ear-l 5s ease-in-out infinite; }
-.kobe .k-ear-r { transform-origin: 138px 60px; animation: k-ear-r 5s ease-in-out infinite 0.4s; }
-.kobe .k-eyes-open { transform-origin: 100px 77px; animation: k-blink 4.6s infinite; }
+.kobe .k-head { transform-origin: 100px 150px; animation: k-tilt 7s ease-in-out infinite; }
+.kobe .k-tail { transform-origin: 134px 186px; animation: k-wag 0.5s ease-in-out infinite alternate; }
+.kobe .k-ear-l { transform-origin: 58px 64px; animation: k-ear-l 2.6s ease-in-out infinite; }
+.kobe .k-ear-r { transform-origin: 142px 64px; animation: k-ear-r 2.6s ease-in-out infinite; }
+.kobe .k-eyes-open { transform-origin: 100px 88px; animation: k-blink 4.6s infinite; }
 .kobe .k-pupils { transition: transform 0.3s ease; }
 .kobe .k-shadow { transform-origin: 100px 212px; animation: k-shadow 2.6s ease-in-out infinite; }
 
@@ -22,7 +22,7 @@
 .kobe.mood-happy .k-eyes-happy, .kobe.mood-cheer .k-eyes-happy { display: inline; }
 .kobe.mood-happy .k-mouth-smile, .kobe.mood-cheer .k-mouth-smile { display: none; }
 .kobe.mood-happy .k-mouth-open, .kobe.mood-cheer .k-mouth-open { display: inline; }
-.kobe.mood-happy .k-tongue, .kobe.mood-cheer .k-tongue { transform-origin: 100px 116px; animation: k-pant 0.3s ease-in-out infinite alternate; }
+.kobe.mood-happy .k-tongue, .kobe.mood-cheer .k-tongue { transform-origin: 100px 124px; animation: k-pant 0.3s ease-in-out infinite alternate; }
 
 /* cheer: big jump with a spin and sparkles */
 .kobe.mood-cheer .k-root { animation: k-cheer 1.1s cubic-bezier(.3,.7,.4,1) infinite; }
@@ -35,9 +35,9 @@
 
 /* sad: droopy ears, head down, tail still, a tear */
 .kobe.mood-sad .k-root { animation: k-breathe 3.6s ease-in-out infinite; }
-.kobe.mood-sad .k-head { animation: none; transform: translateY(7px) rotate(-4deg); transition: transform 0.4s; }
-.kobe.mood-sad .k-ear-l { animation: none; transform: rotate(-38deg); transition: transform 0.4s; }
-.kobe.mood-sad .k-ear-r { animation: none; transform: rotate(38deg); transition: transform 0.4s; }
+.kobe.mood-sad .k-head { animation: none; transform: translateY(5px) rotate(-4deg); transition: transform 0.4s; }
+.kobe.mood-sad .k-ear-l { animation: none; transform: rotate(14deg); transition: transform 0.4s; }
+.kobe.mood-sad .k-ear-r { animation: none; transform: rotate(-14deg); transition: transform 0.4s; }
 .kobe.mood-sad .k-tail { animation: none; transform: rotate(30deg); }
 .kobe.mood-sad .k-brows { display: none; }
 .kobe.mood-sad .k-brows-sad, .kobe.mood-sad .k-tear, .kobe.mood-sad .k-mouth-sad { display: inline; }
@@ -63,8 +63,8 @@
 @keyframes k-shadow { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(1.03); } }
 @keyframes k-tilt { 0%,70%,100% { transform: rotate(0); } 78% { transform: rotate(-7deg); } 90% { transform: rotate(-7deg); } }
 @keyframes k-wag { from { transform: rotate(-16deg); } to { transform: rotate(18deg); } }
-@keyframes k-ear-l { 0%,88%,100% { transform: rotate(0); } 92% { transform: rotate(-10deg); } 96% { transform: rotate(3deg); } }
-@keyframes k-ear-r { 0%,88%,100% { transform: rotate(0); } 92% { transform: rotate(10deg); } 96% { transform: rotate(-3deg); } }
+@keyframes k-ear-l { 0%,100% { transform: rotate(0); } 50% { transform: rotate(5deg); } }
+@keyframes k-ear-r { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-5deg); } }
 @keyframes k-blink { 0%,93%,100% { transform: scaleY(1); } 96% { transform: scaleY(0.08); } }
 @keyframes k-hop {
   0%,100% { transform: translateY(0) scale(1.06,0.94); }
@@ -89,3 +89,6 @@
 @media (prefers-reduced-motion: reduce) {
   .kobe *, .kobe { animation: none !important; }
 }
+
+.kobe.mood-happy .k-ear-l, .kobe.mood-cheer .k-ear-l { animation: k-ear-l 0.35s ease-in-out infinite; }
+.kobe.mood-happy .k-ear-r, .kobe.mood-cheer .k-ear-r { animation: k-ear-r 0.35s ease-in-out infinite; }

@@ -1,4 +1,4 @@
-// Kobe the Aussie: an animated SVG mascot.
+// Baby Kobe the Aussie puppy: an animated SVG mascot.
 // mood: 'idle' | 'happy' | 'sad' | 'cheer' | 'think' | 'sleep'
 import './kobe.css';
 
@@ -20,119 +20,109 @@ export default function Kobe({ mood = 'idle', size = 160, className = '', onClic
       aria-label={title}
       onClick={onClick}
     >
-      <ellipse className="k-shadow" cx="100" cy="212" rx="58" ry="7" fill="#000" opacity="0.12" />
+      <ellipse className="k-shadow" cx="100" cy="212" rx="50" ry="6" fill="#000" opacity="0.12" />
       <g className="k-root">
-        {/* fluffy tail nub */}
+        {/* tiny fluffy tail */}
         <g className="k-tail">
-          <path d="M140 168 q26 -18 30 -6 q4 10 -22 22 z" fill={MERLE} stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
-          <path d="M158 160 q8 -2 10 4" fill="none" stroke={WHITE} strokeWidth="4" strokeLinecap="round" />
+          <path d="M130 184 q20 -16 24 -4 q2 9 -20 13 z" fill={MERLE} stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
         </g>
 
-        {/* haunches + body */}
-        <ellipse cx="60" cy="186" rx="24" ry="20" fill={MERLE} stroke={OUTLINE} strokeWidth="3" />
-        <ellipse cx="140" cy="186" rx="24" ry="20" fill={MERLE} stroke={OUTLINE} strokeWidth="3" />
-        <path d="M58 200 q-4 -70 42 -78 q46 8 42 78 z" fill={MERLE} stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
-        <circle cx="70" cy="160" r="9" fill={MERLE_DARK} opacity="0.85" />
-        <circle cx="133" cy="172" r="7" fill={MERLE_DARK} opacity="0.85" />
-        <circle cx="126" cy="150" r="5" fill={MERLE_LIGHT} />
+        {/* chubby little body */}
+        <ellipse cx="68" cy="198" rx="18" ry="12" fill={MERLE} stroke={OUTLINE} strokeWidth="3" />
+        <ellipse cx="132" cy="198" rx="18" ry="12" fill={MERLE} stroke={OUTLINE} strokeWidth="3" />
+        <ellipse cx="100" cy="180" rx="40" ry="30" fill={MERLE} stroke={OUTLINE} strokeWidth="3" />
+        <circle cx="126" cy="172" r="6" fill={MERLE_DARK} opacity="0.85" />
+        <ellipse cx="100" cy="178" rx="21" ry="22" fill={WHITE} />
 
-        {/* white chest ruff */}
-        <path
-          d="M74 132 q8 10 4 18 q10 -4 10 6 q8 -6 12 2 q4 -8 12 -2 q0 -10 10 -6 q-4 -8 4 -18 q-4 50 -26 66 q-22 -16 -26 -66 z"
-          fill={WHITE}
-          stroke={OUTLINE}
-          strokeWidth="2.5"
-          strokeLinejoin="round"
-        />
-
-        {/* front legs */}
+        {/* stubby paws */}
         <g className="k-legs">
-          <rect x="76" y="168" width="20" height="40" rx="10" fill={WHITE} stroke={OUTLINE} strokeWidth="3" />
-          <rect x="104" y="168" width="20" height="40" rx="10" fill={WHITE} stroke={OUTLINE} strokeWidth="3" />
-          <path d="M82 204 v-6 M90 204 v-6 M110 204 v-6 M118 204 v-6" stroke={OUTLINE} strokeWidth="2" strokeLinecap="round" />
-          <path d="M80 176 q8 -4 14 0" fill="none" stroke={COPPER} strokeWidth="4" strokeLinecap="round" />
-          <path d="M106 176 q8 -4 14 0" fill="none" stroke={COPPER} strokeWidth="4" strokeLinecap="round" />
+          <rect x="80" y="188" width="17" height="21" rx="8.5" fill={WHITE} stroke={OUTLINE} strokeWidth="3" />
+          <rect x="103" y="188" width="17" height="21" rx="8.5" fill={WHITE} stroke={OUTLINE} strokeWidth="3" />
+          <path d="M86 206 v-4 M91 206 v-4 M109 206 v-4 M114 206 v-4" stroke={OUTLINE} strokeWidth="2" strokeLinecap="round" />
         </g>
 
-        {/* head */}
+        {/* big puppy head */}
         <g className="k-head">
           <g className="k-ear k-ear-l">
-            <path d="M56 72 Q38 46 44 26 Q64 26 88 46 Z" fill={MERLE_DARK} stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
-            <path d="M58 62 Q48 46 50 36 Q62 38 76 48 Z" fill="#e8a7a0" />
-            <path className="k-ear-tip" d="M44 26 Q28 28 22 50 Q36 48 54 34 Z" fill={MERLE_DARK} stroke={OUTLINE} strokeWidth="2.5" strokeLinejoin="round" />
+            <path d="M54 60 Q22 62 24 102 Q28 128 46 122 Q58 100 66 72 Z" fill={MERLE_DARK} stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
+            <path d="M50 74 Q34 80 36 104 Q40 114 46 110 Q52 94 56 78 Z" fill="#e8a7a0" opacity="0.8" />
           </g>
           <g className="k-ear k-ear-r">
-            <path d="M144 72 Q162 46 156 26 Q136 26 112 46 Z" fill={MERLE} stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
-            <path d="M142 62 Q152 46 150 36 Q138 38 124 48 Z" fill="#e8a7a0" />
-            <path className="k-ear-tip" d="M156 26 Q172 28 178 50 Q164 48 146 34 Z" fill={MERLE} stroke={OUTLINE} strokeWidth="2.5" strokeLinejoin="round" />
-            <circle cx="160" cy="40" r="4" fill={MERLE_DARK} />
+            <path d="M146 60 Q178 62 176 102 Q172 128 154 122 Q142 100 134 72 Z" fill={MERLE} stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
+            <path d="M150 74 Q166 80 164 104 Q160 114 154 110 Q148 94 144 78 Z" fill="#e8a7a0" opacity="0.8" />
+            <circle cx="164" cy="90" r="4" fill={MERLE_DARK} />
           </g>
 
-          <path d="M100 36 C138 36 154 62 152 88 C150 112 132 124 100 124 C68 124 50 112 48 88 C46 62 62 36 100 36 Z" fill={MERLE} stroke={OUTLINE} strokeWidth="3" />
+          <path d="M100 32 C150 32 166 64 164 96 C162 132 136 146 100 146 C64 146 38 132 36 96 C34 64 50 32 100 32 Z" fill={MERLE} stroke={OUTLINE} strokeWidth="3" />
+          {/* fluffy head tuft */}
+          <path d="M88 36 Q90 18 100 28 Q108 14 112 36 Z" fill={MERLE} stroke={OUTLINE} strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M86 40 L114 40" stroke={MERLE} strokeWidth="5" />
           {/* merle patches */}
-          <path d="M60 60 q10 -22 32 -20 q-6 14 -14 30 q-12 4 -18 -10 z" fill={MERLE_DARK} />
-          <circle cx="132" cy="56" r="8" fill={MERLE_DARK} />
-          <circle cx="142" cy="74" r="5" fill={MERLE_DARK} />
-          <circle cx="124" cy="46" r="4" fill={MERLE_LIGHT} />
-          <circle cx="70" cy="88" r="4" fill={MERLE_LIGHT} />
+          <path d="M50 74 q6 -32 36 -36 q-4 20 -12 40 q-16 8 -24 -4 z" fill={MERLE_DARK} />
+          <circle cx="136" cy="56" r="8" fill={MERLE_DARK} />
+          <circle cx="150" cy="76" r="5" fill={MERLE_DARK} />
+          <circle cx="126" cy="44" r="4" fill={MERLE_LIGHT} />
 
           {/* white blaze + muzzle */}
-          <path d="M95 38 Q100 35 105 38 L108 70 Q100 74 92 70 Z" fill={WHITE} />
-          <ellipse cx="100" cy="104" rx="30" ry="21" fill={WHITE} stroke={OUTLINE} strokeWidth="2.5" />
-          {/* copper cheeks + brow dots */}
-          <ellipse cx="68" cy="102" rx="11" ry="8" fill={COPPER} opacity="0.95" />
-          <ellipse cx="132" cy="102" rx="11" ry="8" fill={COPPER} opacity="0.95" />
+          <path d="M97 50 Q100 46 103 50 L108 76 Q100 80 92 76 Z" fill={WHITE} />
+          <ellipse cx="62" cy="110" rx="10" ry="7" fill={COPPER} />
+          <ellipse cx="138" cy="110" rx="10" ry="7" fill={COPPER} />
+          <ellipse cx="100" cy="116" rx="27" ry="18" fill={WHITE} stroke={OUTLINE} strokeWidth="2.5" />
+          {/* rosy puppy blush */}
+          <ellipse cx="58" cy="116" rx="9" ry="5" fill="#f49aa3" opacity="0.7" />
+          <ellipse cx="142" cy="116" rx="9" ry="5" fill="#f49aa3" opacity="0.7" />
           <g className="k-brows">
-            <ellipse cx="78" cy="58" rx="6" ry="4" fill={COPPER} />
-            <ellipse cx="122" cy="58" rx="6" ry="4" fill={COPPER} />
+            <ellipse cx="74" cy="64" rx="6" ry="4" fill={COPPER} />
+            <ellipse cx="126" cy="64" rx="6" ry="4" fill={COPPER} />
           </g>
           <g className="k-brows-sad">
-            <path d="M70 62 L88 56" stroke={OUTLINE} strokeWidth="3.5" strokeLinecap="round" />
-            <path d="M130 62 L112 56" stroke={OUTLINE} strokeWidth="3.5" strokeLinecap="round" />
+            <path d="M64 70 L84 63" stroke={OUTLINE} strokeWidth="3.5" strokeLinecap="round" />
+            <path d="M136 70 L116 63" stroke={OUTLINE} strokeWidth="3.5" strokeLinecap="round" />
           </g>
 
-          {/* eyes: Kobe has one blue eye and one brown eye */}
+          {/* big shiny eyes: one blue, one brown, like Kobe */}
           <g className="k-eyes-open">
-            <circle cx="80" cy="76" r="12" fill="#fff" stroke={OUTLINE} strokeWidth="2.5" />
-            <circle cx="120" cy="76" r="12" fill="#fff" stroke={OUTLINE} strokeWidth="2.5" />
+            <circle cx="76" cy="88" r="16" fill="#fff" stroke={OUTLINE} strokeWidth="2.5" />
+            <circle cx="124" cy="88" r="16" fill="#fff" stroke={OUTLINE} strokeWidth="2.5" />
             <g className="k-pupils">
-              <circle cx="81" cy="77" r="7.5" fill="#4aa8e8" />
-              <circle cx="121" cy="77" r="7.5" fill="#7a4a24" />
-              <circle cx="81" cy="77" r="4" fill="#15181d" />
-              <circle cx="121" cy="77" r="4" fill="#15181d" />
-              <circle cx="84" cy="73.5" r="2.4" fill="#fff" />
-              <circle cx="124" cy="73.5" r="2.4" fill="#fff" />
+              <circle cx="77" cy="89" r="12" fill="#4aa8e8" />
+              <circle cx="123" cy="89" r="12" fill="#7a4a24" />
+              <circle cx="77" cy="89" r="7" fill="#15181d" />
+              <circle cx="123" cy="89" r="7" fill="#15181d" />
+              <circle cx="81" cy="84" r="4" fill="#fff" />
+              <circle cx="127" cy="84" r="4" fill="#fff" />
+              <circle cx="73" cy="93" r="2" fill="#fff" />
+              <circle cx="119" cy="93" r="2" fill="#fff" />
             </g>
           </g>
           <g className="k-eyes-happy">
-            <path d="M69 80 Q80 66 91 80" fill="none" stroke={OUTLINE} strokeWidth="4" strokeLinecap="round" />
-            <path d="M109 80 Q120 66 131 80" fill="none" stroke={OUTLINE} strokeWidth="4" strokeLinecap="round" />
+            <path d="M63 92 Q76 76 89 92" fill="none" stroke={OUTLINE} strokeWidth="4.5" strokeLinecap="round" />
+            <path d="M111 92 Q124 76 137 92" fill="none" stroke={OUTLINE} strokeWidth="4.5" strokeLinecap="round" />
           </g>
           <g className="k-eyes-closed">
-            <path d="M70 78 Q80 84 90 78" fill="none" stroke={OUTLINE} strokeWidth="3.5" strokeLinecap="round" />
-            <path d="M110 78 Q120 84 130 78" fill="none" stroke={OUTLINE} strokeWidth="3.5" strokeLinecap="round" />
+            <path d="M64 90 Q76 97 88 90" fill="none" stroke={OUTLINE} strokeWidth="3.5" strokeLinecap="round" />
+            <path d="M112 90 Q124 97 136 90" fill="none" stroke={OUTLINE} strokeWidth="3.5" strokeLinecap="round" />
           </g>
           <g className="k-tear">
-            <path d="M74 90 q-4 8 0 11 q4 -3 0 -11 z" fill="#6cc3f5" />
+            <path d="M66 104 q-4 8 0 11 q4 -3 0 -11 z" fill="#6cc3f5" />
           </g>
 
-          {/* nose + mouth */}
-          <path d="M90 94 Q100 88 110 94 Q108 104 100 106 Q92 104 90 94 Z" fill="#1d2027" />
-          <ellipse cx="96" cy="94" rx="3" ry="1.6" fill="#fff" opacity="0.6" />
+          {/* little nose + mouth */}
+          <path d="M92 106 Q100 101 108 106 Q106 113 100 114 Q94 113 92 106 Z" fill="#1d2027" />
+          <ellipse cx="97" cy="105" rx="2.5" ry="1.3" fill="#fff" opacity="0.6" />
           <g className="k-mouth-smile">
-            <path d="M100 106 Q100 114 90 115 M100 106 Q100 114 110 115" fill="none" stroke={OUTLINE} strokeWidth="3" strokeLinecap="round" />
+            <path d="M100 114 Q100 121 92 122 M100 114 Q100 121 108 122" fill="none" stroke={OUTLINE} strokeWidth="2.8" strokeLinecap="round" />
           </g>
           <g className="k-mouth-open">
-            <path d="M86 110 Q100 108 114 110 Q112 126 100 127 Q88 126 86 110 Z" fill="#7a2230" stroke={OUTLINE} strokeWidth="2.5" strokeLinejoin="round" />
-            <path className="k-tongue" d="M92 118 Q100 114 108 118 Q109 132 100 134 Q91 132 92 118 Z" fill="#f07c8a" stroke={OUTLINE} strokeWidth="2" />
-            <path d="M100 119 v9" stroke="#c95565" strokeWidth="1.6" strokeLinecap="round" />
+            <path d="M88 118 Q100 116 112 118 Q110 132 100 133 Q90 132 88 118 Z" fill="#7a2230" stroke={OUTLINE} strokeWidth="2.5" strokeLinejoin="round" />
+            <path className="k-tongue" d="M93 125 Q100 121 107 125 Q108 138 100 140 Q92 138 93 125 Z" fill="#f07c8a" stroke={OUTLINE} strokeWidth="2" />
           </g>
           <g className="k-mouth-sad">
-            <path d="M90 116 Q100 108 110 116" fill="none" stroke={OUTLINE} strokeWidth="3" strokeLinecap="round" />
+            <path d="M91 125 Q100 118 109 125" fill="none" stroke={OUTLINE} strokeWidth="2.8" strokeLinecap="round" />
           </g>
           <g className="k-zzz">
-            <text x="146" y="40" fontSize="18" fontWeight="900" fill="#8e9bad">z</text>
-            <text x="160" y="24" fontSize="14" fontWeight="900" fill="#8e9bad">z</text>
+            <text x="150" y="34" fontSize="18" fontWeight="900" fill="#8e9bad">z</text>
+            <text x="164" y="18" fontSize="14" fontWeight="900" fill="#8e9bad">z</text>
           </g>
         </g>
       </g>
