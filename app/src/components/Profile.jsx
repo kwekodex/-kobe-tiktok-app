@@ -1,0 +1,79 @@
+import { useStore } from '../lib/store.jsx';
+import { todayKey } from '../lib/dates.js';
+import { allLessons } from '../data/course.js';
+import { DailyGoal } from './SidePanel.jsx';
+
+const ACHIEVEMENTS = [
+  { id: 'first', icon: '🐣', name: 'First steps', test: (s) => s.lessonsDone >= 1, desc: 'Complete a lesson' },
+  { id: 'streak3', icon: '🔥', name: 'Warming up', test: (s) => s.longestStreak >= 3, desc: 'Reach a 3 day streak' },
+  { id: 'perfect', icon: '💯', name: 'Good dog', test: (s) => s.perfectLessons >= 1, desc: 'Finish a lesson with no mistakes' },
+  { id: 'xp100', icon: '⚡', name: 'Zoomies', test: (s) => s.totalXp >= 100, desc: 'Earn 100 XP' },
+  { id: 'unit1', icon: '🐑', name: 'Herder', test: (s) => allLessons.filter((l) => l.unitId === 'u1').every((l) => s.completed[l.id]), desc: 'Finish Unit 1' },
+  { id: 'all', icon: '🏆', name: 'Top dog', test: (s) => allLessons.every((l) => s.completed[l.id]), desc: 'Finish the course' },
+];
+
+export default function Profile() {
+  const { state, dispatch } = useStore();
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (6 - i));
+    return { label: d.toLocaleDateString(undefined, { weekday: 'narrow' }), xp: state.xpByDay[todayKey(d)] || 0 };
+  });
+  const maxXp = Math.max(state.dailyGoal, ...days.map((d) => d.xp));
+
+  return (
+    <div className="page">
+      <div className="profile-head">
+        <span className="profile-avatar">{state.user.avatar}</span>
+        <div>
+          <h1>{state.user.name}</h1>
+          <p className="muted">Joined {new Date(state.user.joinedAt).toLocaleDateString()} · {state.user.online ? 'Synced ☁️' : 'Saved on this device'}</p>
+        </div>
+      </div>
+
+      <h2>Statistics</h2>
+      <div className="stat-grid">
+        <div className="stat-card"><strong>🔥 {state.streak}</strong><span>Day streak</span></div>
+        <div className="stat-card"><strong>⚡ {state.totalXp}</strong><span>Total XP</span></div>
+        <div className="stat-card"><strong>📚 {Object.keys(state.completed).length}/{allLessons.length}</strong><span>Lessons</span></div>
+        <div className="stat-card"><strong>🏅 {state.longestStreak}</strong><span>Longest streak</span></div>
+      </div>
+
+      <h2>This week</h2>
+      <div className="week-chart" role="img" aria-label="XP earned per day this week">
+        {days.map((d, i) => (
+          <div key={i} className="week-col">
+            <span className="week-val">{d.xp || ''}</span>
+            <div className="week-bar" style={{ height: `${(d.xp / maxXp) * 100}%` }} />
+            <span className="week-day">{d.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <h2>Achievements</h2>
+      <div className="ach-grid">
+        {ACHIEVEMENTS.map((a) => {
+          const got = a.test(state);
+          return (
+            <div key={a.id} className={`ach ${got ? 'got' : ''}`}>
+              <span className="ach-icon">{a.icon}</span>
+              <div><strong>{a.name}</strong><span className="muted">{a.desc}</span></div>
+            </div>
+          );
+        })}
+      </div>
+
+      <h2>Settings</h2>
+      <div className="mobile-only"><DailyGoal /></div>
+      <div className="settings">
+        <label>Daily goal
+          <select className="input" value={state.dailyGoal} onChange={(e) => dispatch({ type: 'setGoal', goal: Number(e.target.value) })}>
+            {[10, 20, 30, 50].map((g) => <option key={g} value={g}>{g} XP</option>)}
+          </select>
+        </label>
+        <label className="check"><input type="checkbox" checked={state.sound} onChange={() => dispatch({ type: 'toggleSound' })} /> Sound effects</label>
+        <button className="btn btn-link danger" onClick={() => { if (confirm('Reset all progress on this device?')) dispatch({ type: 'reset' }); }}>Reset progress</button>
+      </div>
+    </div>
+  );
+}
