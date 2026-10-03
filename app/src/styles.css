@@ -378,3 +378,8 @@ h1, h2, h3 { margin: 0 0 .5rem; font-weight: 900; }
 .rate-row .btn { margin-left: auto; padding: 9px 16px; }
 .reset-confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 [dir="rtl"].answer-line, [dir="rtl"].bank { direction: rtl; }
+
+/* 3D Kobe */
+.kobe3d { position: relative; display: inline-block; flex: none; }
+.kobe3d canvas { display: block; cursor: pointer; transition: opacity .25s; touch-action: manipulation; }
+.kobe3d-placeholder { position: absolute; inset: 0; }

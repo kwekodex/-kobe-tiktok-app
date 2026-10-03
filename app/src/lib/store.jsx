@@ -28,6 +28,8 @@ const initial = {
   weak: {}, // { [course]: exercise keys answered wrong recently }
   voices: {}, // { [course]: voiceURI }
   speechRate: 1,
+  speechPitch: 1,
+  kobe3d: true,
   lessonsDone: 0,
   perfectLessons: 0,
   sound: true,
@@ -109,6 +111,10 @@ function reducer(state, action) {
       return { ...s, voices: { ...s.voices, [action.course]: action.voiceURI } };
     case 'setRate':
       return { ...s, speechRate: action.rate };
+    case 'setPitch':
+      return { ...s, speechPitch: action.pitch };
+    case 'toggleKobe3d':
+      return { ...s, kobe3d: !s.kobe3d };
     case 'finishSession': {
       const { xp, lessonId, perfect } = action;
       const today = todayKey();
