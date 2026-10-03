@@ -383,3 +383,8 @@ h1, h2, h3 { margin: 0 0 .5rem; font-weight: 900; }
 .kobe3d { position: relative; display: inline-block; flex: none; }
 .kobe3d canvas { display: block; cursor: pointer; transition: opacity .25s; touch-action: manipulation; }
 .kobe3d-placeholder { position: absolute; inset: 0; }
+.row-label { min-width: 48px; }
+.preview-btn { align-self: flex-start; padding: 10px 18px; }
+.voice-lang.studio { color: var(--primary); }
+.small-note { font-size: .88rem; }
+.rate-row .btn { margin-left: 0; }

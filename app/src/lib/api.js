@@ -17,5 +17,6 @@ export const api = {
   createUser: (name, avatar) => soft(() => req('/users', { method: 'POST', body: { name, avatar } })),
   getUser: (id) => soft(() => req(`/users/${id}`)),
   saveState: (id, state) => soft(() => req(`/users/${id}/state`, { method: 'PUT', body: { state } })),
+  ttsVoices: (lang) => soft(() => req(`/tts/voices?lang=${encodeURIComponent(lang)}`)),
   leaderboard: (id) => soft(() => req(`/leaderboard?userId=${encodeURIComponent(id)}`)),
 };

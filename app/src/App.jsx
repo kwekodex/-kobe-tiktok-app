@@ -37,8 +37,8 @@ export default function App() {
   }, [state.course]);
 
   useEffect(() => {
-    if (course) setSpeechConfig({ lang: course.tts, voiceURI: state.voices[course.code] || null, rate: state.speechRate });
-  }, [course, state.voices, state.speechRate]);
+    if (course) setSpeechConfig({ lang: course.tts, voiceURI: state.voices[course.code] || null, rate: state.speechRate, pitch: state.speechPitch });
+  }, [course, state.voices, state.speechRate, state.speechPitch]);
 
   if (!state.user || !state.course) return <Onboarding />;
 

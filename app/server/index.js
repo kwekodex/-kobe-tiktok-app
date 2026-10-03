@@ -2,7 +2,8 @@ import express from 'express';
 import { randomUUID } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { db } from './db.js';
+import { db, DATA_DIR } from './db.js';
+import { createTts } from './tts.js';
 import { curriculum } from '../src/data/curriculum.js';
 import { languages } from '../src/data/languages.js';
 import { leagueBots } from '../src/lib/league.js';
@@ -15,6 +16,30 @@ app.use(express.json({ limit: '200kb' }));
 const publicUser = (u) => ({ id: u.id, name: u.name, avatar: u.avatar, joinedAt: u.joinedAt });
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
+
+// ---- studio voices (cloud text-to-speech) ----
+const tts = createTts(DATA_DIR);
+if (tts.enabled) console.log(`Studio voices: ${tts.provider}`);
+
+app.get('/api/tts/voices', async (req, res) => {
+  if (!tts.enabled) return res.json({ enabled: false, voices: [] });
+  try {
+    res.json({ enabled: true, voices: await tts.voices(String(req.query.lang || '')) });
+  } catch (e) {
+    console.error(e);
+    res.status(502).json({ enabled: true, voices: [], error: 'voice list unavailable' });
+  }
+});
+
+app.get('/api/tts', async (req, res) => {
+  try {
+    const { data, type } = await tts.audio(req.query.text, String(req.query.voice || ''), req.query.rate);
+    res.set('Content-Type', type).set('Cache-Control', 'public, max-age=31536000, immutable').send(data);
+  } catch (e) {
+    if (!e.status) console.error(e);
+    res.status(e.status || 502).json({ error: e.message });
+  }
+});
 
 app.get('/api/courses', (_req, res) => res.json({ languages, curriculum }));
 
