@@ -4,6 +4,7 @@ import { tokenize } from './answer.js';
 import { shuffle, sample, pick } from './random.js';
 
 const canListen = () =>
+  import.meta.env.VITE_SPEAK !== 'off' &&
   typeof window !== 'undefined' && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
 const sentenceKey = (s) => `s:${s.es}`;
