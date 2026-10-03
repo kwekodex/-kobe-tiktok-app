@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useStore } from '../lib/store.jsx';
 import { api } from '../lib/api.js';
 import { leagueBots } from '../lib/league.js';
+import Avatar from './Avatar.jsx';
 
 export default function Leaderboard() {
   const { state } = useStore();
@@ -30,7 +31,7 @@ export default function Leaderboard() {
           {board.map((e, i) => (
             <li key={e.id} className={`${e.you ? 'you' : ''} ${i < 5 ? 'promo' : ''}`}>
               <span className="rank">{i < 3 ? ['🥇', '🥈', '🥉'][i] : i + 1}</span>
-              <span className="avatar">{e.avatar}</span>
+              <span className="avatar"><Avatar id={e.you ? state.user.avatar : e.avatar} size={40} /></span>
               <span className="name">{e.name}{e.you ? ' (you)' : ''}</span>
               <span className="xp">{e.weekXp} XP</span>
             </li>

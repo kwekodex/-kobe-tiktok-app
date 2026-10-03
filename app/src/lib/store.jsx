@@ -43,6 +43,9 @@ function load() {
     if (Array.isArray(saved.weak)) saved.weak = { es: saved.weak };
     if (Object.keys(saved.completed).some((k) => /^u\d+l\d+$/.test(k))) saved.completed = { es: saved.completed };
     if (saved.user && !saved.course) saved.course = 'es';
+    // Old saves used emoji avatars; switch them to the matching plush animal.
+    const EMOJI = { '🐱': 'cat', '🦊': 'fox', '🐼': 'panda', '🐨': 'koala', '🐸': 'frog', '🦁': 'lion', '🐰': 'bunny', '🐶': 'bear' };
+    if (saved.user && EMOJI[saved.user.avatar]) saved.user = { ...saved.user, avatar: EMOJI[saved.user.avatar] };
     return saved;
   } catch {
     return initial;

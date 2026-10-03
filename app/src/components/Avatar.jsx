@@ -1,9 +1,7 @@
-// Player avatars: original animal friends drawn in the same style as Kobe
-// (thick outline, round head, big shiny eyes, rosy cheeks).
+// Player avatars: original plush animal friends in the same soft-toy style as
+// Kobe (fuzzy edges, gentle shading, beady eyes, rosy cheeks).
+import { useId } from 'react';
 import './avatar.css';
-
-const OUT = '#2a2f38';
-const S = { stroke: OUT, strokeWidth: 3, strokeLinejoin: 'round' };
 
 export const AVATARS = [
   { id: 'cat', name: 'Miso', animal: 'cat' },
@@ -20,193 +18,157 @@ export const AVATARS = [
 
 export const avatarInfo = (id) => AVATARS.find((a) => a.id === id) || AVATARS[0];
 
-// Big shiny eyes, shared by every animal.
-function Eyes({ y = 62, gap = 15, r = 9, iris = '#2a2f38' }) {
-  return (
-    <g className="av-eyes">
-      {[-gap, gap].map((dx) => (
-        <g key={dx}>
-          <circle cx={60 + dx} cy={y} r={r} fill={iris} />
-          <circle cx={60 + dx + r * 0.35} cy={y - r * 0.38} r={r * 0.36} fill="#fff" />
-          <circle cx={60 + dx - r * 0.3} cy={y + r * 0.35} r={r * 0.16} fill="#fff" />
-        </g>
-      ))}
-    </g>
-  );
+// Lighten/darken a hex colour for plush shading.
+function shade(hex, amt) {
+  const n = parseInt(hex.slice(1), 16);
+  const f = (c) => Math.max(0, Math.min(255, Math.round(c + (amt > 0 ? (255 - c) * amt : c * amt))));
+  const r = f(n >> 16), g = f((n >> 8) & 255), b = f(n & 255);
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
 }
 
-const Blush = ({ y = 76, gap = 25, color = '#f49aa3' }) => (
-  <g opacity="0.75">
-    <ellipse cx={60 - gap} cy={y} rx="7" ry="4.5" fill={color} />
-    <ellipse cx={60 + gap} cy={y} rx="7" ry="4.5" fill={color} />
-  </g>
-);
-
-const Smile = ({ y = 80, w = 6 }) => (
-  <path d={`M60 ${y - 4} Q60 ${y + 2} ${60 - w} ${y + 3} M60 ${y - 4} Q60 ${y + 2} ${60 + w} ${y + 3}`} fill="none" stroke={OUT} strokeWidth="2.6" strokeLinecap="round" />
-);
-
-const Head = ({ fill, rx = 40, ry = 36, cy = 64 }) => <ellipse cx="60" cy={cy} rx={rx} ry={ry} fill={fill} {...S} />;
-
+// Each animal: a list of parts drawn back to front. A part is
+// { s: 'e'|'c'|'p', ...geometry, c: colour, soft?: true (blurred marking), plain?: true (no fuzz) }
 const ART = {
-  cat: () => (
-    <>
-      <path d="M26 50 L30 16 L52 34 Z" fill="#f2a65a" {...S} />
-      <path d="M94 50 L90 16 L68 34 Z" fill="#f2a65a" {...S} />
-      <path d="M32 40 L33 25 L44 34 Z" fill="#f5b8b0" />
-      <path d="M88 40 L87 25 L76 34 Z" fill="#f5b8b0" />
-      <Head fill="#f2a65a" />
-      <path d="M52 32 q8 6 16 0 M54 40 q6 4 12 0" fill="none" stroke="#c9742e" strokeWidth="4" strokeLinecap="round" />
-      <ellipse cx="60" cy="80" rx="18" ry="12" fill="#fff4e6" />
-      <Eyes iris="#3b6e3a" />
-      <Blush />
-      <path d="M56 72 h8 l-4 5 z" fill="#e8838f" stroke={OUT} strokeWidth="1.8" strokeLinejoin="round" />
-      <Smile y={81} />
-      <path d="M22 74 h14 M22 82 l14 -3 M98 74 h-14 M98 82 l-14 -3" stroke={OUT} strokeWidth="1.8" strokeLinecap="round" />
-    </>
-  ),
-  fox: () => (
-    <>
-      <path d="M24 52 L28 12 L54 36 Z" fill="#e8743b" {...S} />
-      <path d="M96 52 L92 12 L66 36 Z" fill="#e8743b" {...S} />
-      <path d="M28 12 L33 28 L40 22 Z M92 12 L87 28 L80 22 Z" fill={OUT} />
-      <Head fill="#e8743b" />
-      <path d="M22 66 Q40 70 60 96 Q80 70 98 66 Q96 96 60 100 Q24 96 22 66 Z" fill="#fff8ef" />
-      <Eyes iris="#6b3b1d" />
-      <Blush y={78} />
-      <ellipse cx="60" cy="78" rx="5.5" ry="4" fill={OUT} />
-      <Smile y={86} w={5} />
-    </>
-  ),
-  panda: () => (
-    <>
-      <circle cx="28" cy="34" r="14" fill={OUT} />
-      <circle cx="92" cy="34" r="14" fill={OUT} />
-      <Head fill="#fbfaf7" />
-      <ellipse cx="44" cy="63" rx="12" ry="15" fill={OUT} transform="rotate(25 44 63)" />
-      <ellipse cx="76" cy="63" rx="12" ry="15" fill={OUT} transform="rotate(-25 76 63)" />
-      <Eyes r={6.5} gap={15} iris="#111" />
-      <g className="av-eyes">
-        <circle cx="47" cy="60" r="2.3" fill="#fff" />
-        <circle cx="77" cy="60" r="2.3" fill="#fff" />
-      </g>
-      <Blush y={80} gap={27} />
-      <ellipse cx="60" cy="77" rx="6" ry="4.2" fill={OUT} />
-      <Smile y={85} w={5} />
-    </>
-  ),
-  koala: () => (
-    <>
-      <circle cx="24" cy="44" r="18" fill="#9aa3ad" {...S} />
-      <circle cx="96" cy="44" r="18" fill="#9aa3ad" {...S} />
-      <circle cx="25" cy="45" r="10" fill="#e8e2dc" />
-      <circle cx="95" cy="45" r="10" fill="#e8e2dc" />
-      <Head fill="#9aa3ad" />
-      <Eyes r={7.5} gap={17} iris="#2a2f38" />
-      <Blush y={80} gap={28} />
-      <ellipse cx="60" cy="76" rx="9" ry="12" fill="#3a3f48" stroke={OUT} strokeWidth="2" />
-      <ellipse cx="57" cy="71" rx="2.5" ry="3.5" fill="#fff" opacity="0.5" />
-      <path d="M54 92 q6 4 12 0" fill="none" stroke={OUT} strokeWidth="2.6" strokeLinecap="round" />
-    </>
-  ),
-  bunny: () => (
-    <>
-      <g className="av-ears">
-        <ellipse cx="44" cy="22" rx="10" ry="26" fill="#f4ead8" {...S} />
-        <ellipse cx="76" cy="22" rx="10" ry="26" fill="#f4ead8" {...S} />
-        <ellipse cx="44" cy="24" rx="5" ry="18" fill="#f5b8b0" />
-        <ellipse cx="76" cy="24" rx="5" ry="18" fill="#f5b8b0" />
-      </g>
-      <Head fill="#f4ead8" cy={68} ry={34} />
-      <Eyes y={64} iris="#6b4a2b" />
-      <Blush y={78} />
-      <path d="M56 73 h8 l-4 4 z" fill="#e8838f" stroke={OUT} strokeWidth="1.8" strokeLinejoin="round" />
-      <Smile y={82} w={5} />
-      <rect x="56" y="84" width="8" height="7" rx="1.5" fill="#fff" stroke={OUT} strokeWidth="1.8" />
-      <path d="M60 84 v7" stroke={OUT} strokeWidth="1.4" />
-    </>
-  ),
-  penguin: () => (
-    <>
-      <Head fill="#2f3542" rx={42} ry={38} />
-      <path d="M60 46 C46 30 22 42 26 64 C28 82 44 96 60 96 C76 96 92 82 94 64 C98 42 74 30 60 46 Z" fill="#fbfaf7" />
-      <Eyes y={62} iris="#1d2027" />
-      <Blush y={76} />
-      <path d="M50 74 Q60 70 70 74 Q60 88 50 74 Z" fill="#f2a63a" stroke={OUT} strokeWidth="2.4" strokeLinejoin="round" />
-    </>
-  ),
-  lion: () => (
-    <>
-      <g fill="#c7782f" {...S}>
-        {Array.from({ length: 12 }, (_, i) => {
-          const a = (i / 12) * Math.PI * 2;
-          return <circle key={i} cx={60 + Math.cos(a) * 42} cy={64 + Math.sin(a) * 40} r="14" />;
-        })}
-      </g>
-      <circle cx="30" cy="36" r="10" fill="#f0c05a" {...S} />
-      <circle cx="90" cy="36" r="10" fill="#f0c05a" {...S} />
-      <Head fill="#f0c05a" rx={36} ry={33} />
-      <ellipse cx="60" cy="80" rx="16" ry="11" fill="#fff4dc" />
-      <Eyes iris="#6b3b1d" gap={14} r={8} />
-      <Blush y={77} gap={24} />
-      <path d="M55 72 h10 l-5 6 z" fill="#7a4a24" stroke={OUT} strokeWidth="1.8" strokeLinejoin="round" />
-      <Smile y={83} />
-    </>
-  ),
-  frog: () => (
-    <>
-      <circle cx="40" cy="40" r="17" fill="#7cc46a" {...S} />
-      <circle cx="80" cy="40" r="17" fill="#7cc46a" {...S} />
-      <Head fill="#7cc46a" cy={68} ry={32} rx={42} />
-      <g className="av-eyes">
-        <circle cx="40" cy="40" r="10" fill="#fff" />
-        <circle cx="80" cy="40" r="10" fill="#fff" />
-        <circle cx="41" cy="41" r="6.5" fill={OUT} />
-        <circle cx="81" cy="41" r="6.5" fill={OUT} />
-        <circle cx="43" cy="38" r="2.3" fill="#fff" />
-        <circle cx="83" cy="38" r="2.3" fill="#fff" />
-      </g>
-      <Blush y={74} gap={27} />
-      <path d="M38 76 Q60 96 82 76" fill="none" stroke={OUT} strokeWidth="3" strokeLinecap="round" />
-      <circle cx="54" cy="66" r="1.8" fill={OUT} />
-      <circle cx="66" cy="66" r="1.8" fill={OUT} />
-    </>
-  ),
-  bear: () => (
-    <>
-      <circle cx="28" cy="34" r="14" fill="#a8703f" {...S} />
-      <circle cx="92" cy="34" r="14" fill="#a8703f" {...S} />
-      <circle cx="28" cy="34" r="7" fill="#d9a877" />
-      <circle cx="92" cy="34" r="7" fill="#d9a877" />
-      <Head fill="#a8703f" />
-      <ellipse cx="60" cy="80" rx="17" ry="13" fill="#e8c9a3" />
-      <Eyes iris="#2a2f38" r={8} />
-      <Blush y={76} gap={27} />
-      <ellipse cx="60" cy="75" rx="6.5" ry="4.5" fill={OUT} />
-      <Smile y={84} w={5} />
-    </>
-  ),
-  hamster: () => (
-    <>
-      <circle cx="32" cy="36" r="10" fill="#f1c48c" {...S} />
-      <circle cx="88" cy="36" r="10" fill="#f1c48c" {...S} />
-      <circle cx="32" cy="36" r="5" fill="#f5b8b0" />
-      <circle cx="88" cy="36" r="5" fill="#f5b8b0" />
-      <Head fill="#f1c48c" rx={42} ry={36} />
-      <path d="M60 40 v14" stroke="#d9a066" strokeWidth="5" strokeLinecap="round" />
-      <ellipse cx="38" cy="80" rx="15" ry="12" fill="#fff8ef" />
-      <ellipse cx="82" cy="80" rx="15" ry="12" fill="#fff8ef" />
-      <Eyes iris="#2a2f38" r={8} gap={16} />
-      <Blush y={78} gap={26} />
-      <ellipse cx="60" cy="74" rx="3.5" ry="2.6" fill="#e8838f" />
-      <Smile y={80} w={4} />
-    </>
-  ),
+  cat: {
+    parts: [
+      { s: 'p', d: 'M24 54 L28 14 L54 34 Z', c: '#f0a45c' },
+      { s: 'p', d: 'M96 54 L92 14 L66 34 Z', c: '#f0a45c' },
+      { s: 'p', d: 'M31 42 L33 25 L45 34 Z', c: '#f6b8b0', soft: true },
+      { s: 'p', d: 'M89 42 L87 25 L75 34 Z', c: '#f6b8b0', soft: true },
+      { s: 'e', cx: 60, cy: 66, rx: 41, ry: 37, c: '#f0a45c' },
+      { s: 'e', cx: 60, cy: 36, rx: 9, ry: 4, c: '#c9762f', soft: true },
+      { s: 'e', cx: 60, cy: 45, rx: 6, ry: 3, c: '#c9762f', soft: true },
+      { s: 'e', cx: 60, cy: 82, rx: 19, ry: 13, c: '#fff4e6' },
+    ],
+    eyes: { y: 64, gap: 15 },
+    nose: { y: 76, c: '#e8838f' },
+  },
+  fox: {
+    parts: [
+      { s: 'p', d: 'M22 56 L26 12 L54 36 Z', c: '#e57a3d' },
+      { s: 'p', d: 'M98 56 L94 12 L66 36 Z', c: '#e57a3d' },
+      { s: 'p', d: 'M26 13 L31 30 L40 23 Z', c: '#3a3133', soft: true },
+      { s: 'p', d: 'M94 13 L89 30 L80 23 Z', c: '#3a3133', soft: true },
+      { s: 'e', cx: 60, cy: 66, rx: 42, ry: 37, c: '#e57a3d' },
+      { s: 'p', d: 'M20 68 Q40 72 60 98 Q80 72 100 68 Q98 98 60 102 Q22 98 20 68 Z', c: '#fff7ee' },
+    ],
+    eyes: { y: 64, gap: 16 },
+    nose: { y: 80, c: '#2e2a2c' },
+  },
+  panda: {
+    parts: [
+      { s: 'c', cx: 27, cy: 34, r: 14, c: '#33373f' },
+      { s: 'c', cx: 93, cy: 34, r: 14, c: '#33373f' },
+      { s: 'e', cx: 60, cy: 66, rx: 42, ry: 37, c: '#fbfaf7' },
+      { s: 'e', cx: 44, cy: 65, rx: 12, ry: 15, c: '#33373f', rot: 25, soft: true },
+      { s: 'e', cx: 76, cy: 65, rx: 12, ry: 15, c: '#33373f', rot: -25, soft: true },
+    ],
+    eyes: { y: 63, gap: 15, light: true },
+    nose: { y: 79, c: '#2e2a2c' },
+  },
+  koala: {
+    parts: [
+      { s: 'c', cx: 23, cy: 46, r: 19, c: '#a2abb5' },
+      { s: 'c', cx: 97, cy: 46, r: 19, c: '#a2abb5' },
+      { s: 'c', cx: 24, cy: 47, r: 11, c: '#ece7e1', soft: true },
+      { s: 'c', cx: 96, cy: 47, r: 11, c: '#ece7e1', soft: true },
+      { s: 'e', cx: 60, cy: 66, rx: 41, ry: 37, c: '#a2abb5' },
+      { s: 'e', cx: 60, cy: 80, rx: 9, ry: 12, c: '#3b4049', plain: true },
+    ],
+    eyes: { y: 62, gap: 18 },
+  },
+  bunny: {
+    parts: [
+      { s: 'e', cx: 44, cy: 24, rx: 10, ry: 27, c: '#f3e9d8' },
+      { s: 'e', cx: 76, cy: 24, rx: 10, ry: 27, c: '#f3e9d8' },
+      { s: 'e', cx: 44, cy: 26, rx: 5, ry: 18, c: '#f6b8b0', soft: true },
+      { s: 'e', cx: 76, cy: 26, rx: 5, ry: 18, c: '#f6b8b0', soft: true },
+      { s: 'e', cx: 60, cy: 70, rx: 41, ry: 35, c: '#f3e9d8' },
+      { s: 'e', cx: 60, cy: 84, rx: 17, ry: 11, c: '#fffaf2' },
+    ],
+    eyes: { y: 66, gap: 15 },
+    nose: { y: 78, c: '#e8838f' },
+  },
+  penguin: {
+    parts: [
+      { s: 'e', cx: 60, cy: 66, rx: 43, ry: 39, c: '#323844' },
+      { s: 'p', d: 'M60 48 C46 32 22 44 26 66 C28 84 44 98 60 98 C76 98 92 84 94 66 C98 44 74 32 60 48 Z', c: '#fbfaf7' },
+      { s: 'p', d: 'M51 76 Q60 72 69 76 Q60 89 51 76 Z', c: '#f2a63a', plain: true },
+    ],
+    eyes: { y: 64, gap: 15 },
+  },
+  lion: {
+    parts: [
+      ...Array.from({ length: 12 }, (_, i) => {
+        const a = (i / 12) * Math.PI * 2;
+        return { s: 'c', cx: 60 + Math.cos(a) * 41, cy: 66 + Math.sin(a) * 39, r: 15, c: '#c97d35' };
+      }),
+      { s: 'c', cx: 31, cy: 38, r: 10, c: '#efc160' },
+      { s: 'c', cx: 89, cy: 38, r: 10, c: '#efc160' },
+      { s: 'e', cx: 60, cy: 66, rx: 36, ry: 33, c: '#efc160' },
+      { s: 'e', cx: 60, cy: 82, rx: 16, ry: 11, c: '#fff4dc' },
+    ],
+    eyes: { y: 63, gap: 14 },
+    nose: { y: 76, c: '#7a4a24' },
+  },
+  frog: {
+    parts: [
+      { s: 'c', cx: 40, cy: 42, r: 17, c: '#82c46f' },
+      { s: 'c', cx: 80, cy: 42, r: 17, c: '#82c46f' },
+      { s: 'e', cx: 60, cy: 70, rx: 43, ry: 33, c: '#82c46f' },
+      { s: 'e', cx: 60, cy: 86, rx: 24, ry: 9, c: '#d9efc8', soft: true },
+    ],
+    eyes: { y: 42, gap: 20, big: true },
+    smile: { y: 80, w: 15 },
+  },
+  bear: {
+    parts: [
+      { s: 'c', cx: 27, cy: 34, r: 14, c: '#a8713f' },
+      { s: 'c', cx: 93, cy: 34, r: 14, c: '#a8713f' },
+      { s: 'c', cx: 27, cy: 34, r: 7, c: '#dcae7e', soft: true },
+      { s: 'c', cx: 93, cy: 34, r: 7, c: '#dcae7e', soft: true },
+      { s: 'e', cx: 60, cy: 66, rx: 41, ry: 37, c: '#a8713f' },
+      { s: 'e', cx: 60, cy: 82, rx: 18, ry: 13, c: '#ecceaa' },
+    ],
+    eyes: { y: 63, gap: 15 },
+    nose: { y: 77, c: '#2e2a2c' },
+  },
+  hamster: {
+    parts: [
+      { s: 'c', cx: 32, cy: 38, r: 10, c: '#f0c48d' },
+      { s: 'c', cx: 88, cy: 38, r: 10, c: '#f0c48d' },
+      { s: 'c', cx: 32, cy: 38, r: 5, c: '#f6b8b0', soft: true },
+      { s: 'c', cx: 88, cy: 38, r: 5, c: '#f6b8b0', soft: true },
+      { s: 'e', cx: 60, cy: 66, rx: 43, ry: 37, c: '#f0c48d' },
+      { s: 'e', cx: 60, cy: 48, rx: 3, ry: 9, c: '#d79e63', soft: true },
+      { s: 'e', cx: 38, cy: 82, rx: 16, ry: 12, c: '#fff8ef' },
+      { s: 'e', cx: 82, cy: 82, rx: 16, ry: 12, c: '#fff8ef' },
+    ],
+    eyes: { y: 64, gap: 16 },
+    nose: { y: 76, c: '#e8838f' },
+  },
 };
 
 export default function Avatar({ id, size = 48, className = '', animate = false, title }) {
   const info = avatarInfo(id);
-  const Art = ART[info.id];
+  const art = ART[info.id];
+  const uid = useId().replace(/:/g, '');
+  const ref = (n) => `${n}-${uid}`;
+  const colours = [...new Set(art.parts.filter((p) => !p.soft && !p.plain).map((p) => p.c))];
+  const grad = (c) => `url(#${ref('g' + c.slice(1))})`;
+
+  const shape = (p, i) => {
+    const fill = p.soft || p.plain ? p.c : grad(p.c);
+    const filter = p.soft ? `url(#${ref('soft')})` : p.plain ? undefined : `url(#${ref('fuzz')})`;
+    const common = { fill, filter };
+    if (p.s === 'c') return <circle key={i} {...common} cx={p.cx} cy={p.cy} r={p.r} />;
+    if (p.s === 'p') return <path key={i} {...common} d={p.d} />;
+    return <ellipse key={i} {...common} cx={p.cx} cy={p.cy} rx={p.rx} ry={p.ry} transform={p.rot ? `rotate(${p.rot} ${p.cx} ${p.cy})` : undefined} />;
+  };
+
+  const { y, gap, light, big } = art.eyes;
+  const r = big ? 6.5 : 5;
+
   return (
     <svg
       className={`avatar-art ${animate ? 'av-animate' : ''} ${className}`}
@@ -216,8 +178,50 @@ export default function Avatar({ id, size = 48, className = '', animate = false,
       role="img"
       aria-label={title || `${info.name} the ${info.animal}`}
     >
+      <defs>
+        <filter id={ref('fuzz')} x="-10%" y="-10%" width="120%" height="120%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="5" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="3.5" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id={ref('soft')} x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="9" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="3" result="d" />
+          <feGaussianBlur in="d" stdDeviation="0.8" />
+        </filter>
+        <filter id={ref('blur')}><feGaussianBlur stdDeviation="2.2" /></filter>
+        {colours.map((c) => (
+          <radialGradient key={c} id={ref('g' + c.slice(1))} cx="38%" cy="30%" r="80%">
+            <stop offset="0" stopColor={shade(c, 0.35)} />
+            <stop offset="0.6" stopColor={c} />
+            <stop offset="1" stopColor={shade(c, -0.18)} />
+          </radialGradient>
+        ))}
+      </defs>
       <g className="av-body">
-        <Art />
+        {art.parts.map(shape)}
+        {/* rosy cheeks */}
+        <g filter={`url(#${ref('blur')})`} opacity="0.7">
+          <ellipse cx={60 - gap - 9} cy={big ? 74 : y + 13} rx="7" ry="4.5" fill="#f6a3ad" />
+          <ellipse cx={60 + gap + 9} cy={big ? 74 : y + 13} rx="7" ry="4.5" fill="#f6a3ad" />
+        </g>
+        {/* beady eyes */}
+        <g className="av-eyes">
+          {[-gap, gap].map((dx) => (
+            <g key={dx}>
+              {big && <circle cx={60 + dx} cy={y} r={r + 4} fill="#fffdf8" />}
+              <circle cx={60 + dx} cy={y} r={r} fill={light ? '#111' : '#1d2027'} />
+              <circle cx={60 + dx + r * 0.35} cy={y - r * 0.38} r={r * 0.34} fill="#fff" />
+            </g>
+          ))}
+        </g>
+        {art.nose && (
+          <ellipse cx="60" cy={art.nose.y} rx="4.2" ry="3" fill={art.nose.c} />
+        )}
+        {art.smile ? (
+          <path d={`M${60 - art.smile.w} ${art.smile.y} Q60 ${art.smile.y + 10} ${60 + art.smile.w} ${art.smile.y}`} fill="none" stroke="#3b4a36" strokeWidth="2.4" strokeLinecap="round" />
+        ) : (
+          <path d={`M55 ${(art.nose?.y ?? 78) + 5} Q60 ${(art.nose?.y ?? 78) + 9} 65 ${(art.nose?.y ?? 78) + 5}`} fill="none" stroke="#4a3f45" strokeWidth="2.2" strokeLinecap="round" />
+        )}
       </g>
     </svg>
   );

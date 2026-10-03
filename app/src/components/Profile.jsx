@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useStore, courseCompleted } from '../lib/store.jsx';
 import { useCourse } from '../lib/courses.js';
 import VoiceSettings from './VoiceSettings.jsx';
+import Avatar, { AVATARS, avatarInfo } from './Avatar.jsx';
 import { todayKey } from '../lib/dates.js';
 import { DailyGoal } from './SidePanel.jsx';
 
@@ -29,7 +30,7 @@ export default function Profile() {
   return (
     <div className="page">
       <div className="profile-head">
-        <span className="profile-avatar">{state.user.avatar}</span>
+        <span className="profile-avatar"><Avatar id={state.user.avatar} size={84} animate /></span>
         <div>
           <h1>{state.user.name}</h1>
           <p className="muted">Joined {new Date(state.user.joinedAt).toLocaleDateString()} · {state.user.online ? 'Synced ☁️' : 'Saved on this device'}</p>
@@ -66,6 +67,24 @@ export default function Profile() {
             </div>
           );
         })}
+      </div>
+
+      <h2>Your buddy</h2>
+      <p className="muted">You're {avatarInfo(state.user.avatar).name} the {avatarInfo(state.user.avatar).animal}. Tap another animal to switch.</p>
+      <div className="buddy-grid profile-buddies" role="radiogroup" aria-label="Choose your avatar">
+        {AVATARS.map((a) => (
+          <button
+            type="button"
+            key={a.id}
+            role="radio"
+            aria-checked={state.user.avatar === a.id}
+            className={`buddy ${state.user.avatar === a.id ? 'on' : ''}`}
+            onClick={() => dispatch({ type: 'setUser', user: { avatar: a.id } })}
+          >
+            <Avatar id={a.id} size={54} animate={state.user.avatar === a.id} />
+            <span>{a.name}</span>
+          </button>
+        ))}
       </div>
 
       <h2>Voice</h2>

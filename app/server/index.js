@@ -49,7 +49,7 @@ app.post('/api/users', (req, res) => {
   const user = db.putUser({
     id: randomUUID(),
     name,
-    avatar: String(req.body?.avatar || '🐶').slice(0, 8),
+    avatar: String(req.body?.avatar || 'cat').replace(/[^a-z]/g, '').slice(0, 16) || 'cat',
     joinedAt: new Date().toISOString(),
     state: {},
   });

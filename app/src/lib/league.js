@@ -4,7 +4,7 @@ import { weekKey } from './dates.js';
 
 const NAMES = ['Mia', 'Leo', 'Sofía', 'Noah', 'Lucía', 'Kai', 'Valentina', 'Mateo', 'Ava', 'Diego',
   'Zoe', 'Hugo', 'Isla', 'Tomás', 'Ruby', 'Bruno', 'Elena', 'Finn', 'Camila', 'Oscar'];
-const AVATARS = ['🐶', '🐱', '🦊', '🐼', '🐨', '🐸', '🐵', '🦁', '🐯', '🐰'];
+const AVATARS = ['cat', 'fox', 'panda', 'koala', 'bunny', 'penguin', 'lion', 'frog', 'bear', 'hamster'];
 
 function hash(str) {
   let h = 2166136261;
@@ -21,7 +21,7 @@ export function leagueBots(now = new Date(), count = 14) {
     return {
       id: `bot-${i}`,
       name: NAMES[h % NAMES.length],
-      avatar: AVATARS[(h >> 5) % AVATARS.length],
+      avatar: AVATARS[(h >>> 5) % AVATARS.length],
       weekXp: Math.round(((h % 400) + 20) * progress),
       bot: true,
     };

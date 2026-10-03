@@ -1,16 +1,16 @@
 // Plush Baby Kobe: a soft-toy take on the mascot (fuzzy edges, rounded
-// shapes, beady eyes, rosy cheeks). Preview only; not used in the app yet.
-// mood: 'idle' | 'happy' | 'sleep'
+// shapes, beady eyes, rosy cheeks).
+// mood: 'idle' | 'happy' | 'sad' | 'cheer' | 'think' | 'sleep'
 import { useId } from 'react';
 import './kobe-plush.css';
 
-export default function KobePlush({ mood = 'idle', size = 200, title = 'Kobe the Aussie' }) {
+export default function KobePlush({ mood = 'idle', size = 200, className = '', onClick, title = 'Kobe the Aussie' }) {
   const uid = useId().replace(/:/g, '');
   const id = (n) => `${n}-${uid}`;
   const url = (n) => `url(#${id(n)})`;
 
   return (
-    <svg className={`kplush mood-${mood}`} width={size} height={size * 1.1} viewBox="0 0 200 220" role="img" aria-label={title}>
+    <svg className={`kplush mood-${mood} ${className}`} width={size} height={size * 1.1} viewBox="0 0 200 220" role="img" aria-label={title} onClick={onClick}>
       <defs>
         {/* fuzzy plush edges */}
         <filter id={id('fuzz')} x="-10%" y="-10%" width="120%" height="120%">
@@ -123,6 +123,11 @@ export default function KobePlush({ mood = 'idle', size = 200, title = 'Kobe the
             <path d="M67 96 Q74 87 81 96" fill="none" stroke="#1d2027" strokeWidth="3.4" strokeLinecap="round" />
             <path d="M119 96 Q126 87 133 96" fill="none" stroke="#1d2027" strokeWidth="3.4" strokeLinecap="round" />
           </g>
+          <g className="kp-brows-sad">
+            <path d="M64 80 L82 75" stroke="#e8edf2" strokeWidth="3" strokeLinecap="round" />
+            <path d="M136 80 L118 75" stroke="#e8edf2" strokeWidth="3" strokeLinecap="round" />
+          </g>
+          <path className="kp-tear" d="M70 103 q-4 7 0 10 q4 -3 0 -10 z" fill="#7cc8f2" />
           <g className="kp-eyes-closed">
             <path d="M67 94 Q74 99 81 94" fill="none" stroke="#e8edf2" strokeWidth="3" strokeLinecap="round" />
             <path d="M119 94 Q126 99 133 94" fill="none" stroke="#e8edf2" strokeWidth="3" strokeLinecap="round" />
@@ -134,11 +139,17 @@ export default function KobePlush({ mood = 'idle', size = 200, title = 'Kobe the
           <ellipse cx="103.5" cy="107" rx="1.6" ry="0.9" fill="#fff" opacity="0.5" />
           {/* small upward smile */}
           <path className="kp-smile" d="M93 121 Q100 127 107 121" fill="none" stroke="#4a3f45" strokeWidth="2.4" strokeLinecap="round" />
+          <path className="kp-sad-mouth" d="M93 126 Q100 120 107 126" fill="none" stroke="#4a3f45" strokeWidth="2.4" strokeLinecap="round" />
           <g className="kp-open">
             <path d="M92 120 Q100 118 108 120 Q106 131 100 132 Q94 131 92 120 Z" fill="#8a3341" />
             <path d="M95 126 Q100 123 105 126 Q105 134 100 135 Q95 134 95 126 Z" fill="#f28a97" />
           </g>
         </g>
+      </g>
+      <g className="kp-sparkles">
+        <path d="M26 64 l4 9 l9 4 l-9 4 l-4 9 l-4 -9 l-9 -4 l9 -4 z" fill="#ffd36b" />
+        <path d="M172 98 l3 6 l6 3 l-6 3 l-3 6 l-3 -6 l-6 -3 l6 -3 z" fill="#ffd36b" />
+        <path d="M164 34 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z" fill="#ffa3b4" />
       </g>
       <g className="kp-zzz">
         <text x="150" y="40" fontSize="16" fontWeight="800" fill="#9aa4b0">z</text>

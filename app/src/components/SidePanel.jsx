@@ -1,5 +1,6 @@
 import { useStore, todayXp } from '../lib/store.jsx';
 import Kobe from './Kobe.jsx';
+import Avatar, { avatarInfo } from './Avatar.jsx';
 
 export function DailyGoal() {
   const { state } = useStore();
@@ -23,6 +24,13 @@ export default function SidePanel({ setTab }) {
   const { state } = useStore();
   return (
     <aside className="side">
+      <div className="panel me-card">
+        <Avatar id={state.user.avatar} size={56} animate />
+        <div>
+          <strong>{state.user.name}</strong>
+          <span className="muted">as {avatarInfo(state.user.avatar).name} · {state.totalXp} XP</span>
+        </div>
+      </div>
       <DailyGoal />
       <div className="panel">
         <h3>Puppy League</h3>
