@@ -23,8 +23,11 @@ const initial = {
   hearts: MAX_HEARTS,
   heartsUpdatedAt: Date.now(),
   gems: 500,
-  completed: {}, // lessonId -> times completed
-  weak: [], // exercise keys answered wrong recently
+  course: null, // language code being learned
+  completed: {}, // { [course]: { [lessonId]: times completed } }
+  weak: {}, // { [course]: exercise keys answered wrong recently }
+  voices: {}, // { [course]: voiceURI }
+  speechRate: 1,
   lessonsDone: 0,
   perfectLessons: 0,
   sound: true,
@@ -33,7 +36,13 @@ const initial = {
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? { ...initial, ...JSON.parse(raw) } : initial;
+    if (!raw) return initial;
+    const saved = { ...initial, ...JSON.parse(raw) };
+    // Migrate single-course (Spanish only) saves.
+    if (Array.isArray(saved.weak)) saved.weak = { es: saved.weak };
+    if (Object.keys(saved.completed).some((k) => /^u\d+l\d+$/.test(k))) saved.completed = { es: saved.completed };
+    if (saved.user && !saved.course) saved.course = 'es';
+    return saved;
   } catch {
     return initial;
   }
@@ -74,7 +83,7 @@ function reducer(state, action) {
     case 'tick':
       return s;
     case 'signup':
-      return { ...s, user: action.user, dailyGoal: action.dailyGoal };
+      return { ...s, user: action.user, dailyGoal: action.dailyGoal, course: action.course };
     case 'setUser':
       return { ...s, user: { ...s.user, ...action.user } };
     case 'loseHeart':
@@ -89,11 +98,17 @@ function reducer(state, action) {
       if (s.gems < 200 || s.streakFreezes >= 2) return s;
       return { ...s, gems: s.gems - 200, streakFreezes: s.streakFreezes + 1 };
     case 'markWeak': {
-      const weak = [action.key, ...s.weak.filter((k) => k !== action.key)].slice(0, 40);
-      return { ...s, weak };
+      const list = [action.key, ...(s.weak[s.course] || []).filter((k) => k !== action.key)].slice(0, 40);
+      return { ...s, weak: { ...s.weak, [s.course]: list } };
     }
     case 'markStrong':
-      return { ...s, weak: s.weak.filter((k) => k !== action.key) };
+      return { ...s, weak: { ...s.weak, [s.course]: (s.weak[s.course] || []).filter((k) => k !== action.key) } };
+    case 'setCourse':
+      return { ...s, course: action.course };
+    case 'setVoice':
+      return { ...s, voices: { ...s.voices, [action.course]: action.voiceURI } };
+    case 'setRate':
+      return { ...s, speechRate: action.rate };
     case 'finishSession': {
       const { xp, lessonId, perfect } = action;
       const today = todayKey();
@@ -102,7 +117,8 @@ function reducer(state, action) {
         streak = lastActiveDay && daysBetween(lastActiveDay, today) === 1 ? streak + 1 : 1;
         lastActiveDay = today;
       }
-      const completed = lessonId ? { ...s.completed, [lessonId]: (s.completed[lessonId] || 0) + 1 } : s.completed;
+      const mine = s.completed[s.course] || {};
+      const completed = lessonId ? { ...s.completed, [s.course]: { ...mine, [lessonId]: (mine[lessonId] || 0) + 1 } } : s.completed;
       return {
         ...s,
         totalXp: s.totalXp + xp,
@@ -160,3 +176,7 @@ export const useStore = () => useContext(Ctx);
 export function todayXp(state) {
   return state.xpByDay[todayKey()] || 0;
 }
+
+// Progress for the course currently being learned.
+export const courseCompleted = (state) => state.completed[state.course] || {};
+export const courseWeak = (state) => state.weak[state.course] || [];

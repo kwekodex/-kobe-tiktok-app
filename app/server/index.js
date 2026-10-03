@@ -3,7 +3,8 @@ import { randomUUID } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { db } from './db.js';
-import { course } from '../src/data/course.js';
+import { curriculum } from '../src/data/curriculum.js';
+import { languages } from '../src/data/languages.js';
 import { leagueBots } from '../src/lib/league.js';
 import { weekKey } from '../src/lib/dates.js';
 
@@ -15,7 +16,7 @@ const publicUser = (u) => ({ id: u.id, name: u.name, avatar: u.avatar, joinedAt:
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
-app.get('/api/course', (_req, res) => res.json(course));
+app.get('/api/courses', (_req, res) => res.json({ languages, curriculum }));
 
 app.post('/api/users', (req, res) => {
   const name = String(req.body?.name || '').trim().slice(0, 30);

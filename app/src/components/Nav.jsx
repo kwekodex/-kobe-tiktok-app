@@ -1,6 +1,7 @@
 const TABS = [
   { id: 'learn', icon: '🏠', label: 'Learn' },
   { id: 'practice', icon: '🏋️', label: 'Practice' },
+  { id: 'courses', icon: '🌍', label: 'Languages' },
   { id: 'leagues', icon: '🏆', label: 'Leagues' },
   { id: 'shop', icon: '🛍️', label: 'Shop' },
   { id: 'profile', icon: '🐾', label: 'Profile' },

@@ -1,5 +1,5 @@
-// Builds a lesson session (a queue of exercises) from course content.
-import { allLessons } from '../data/course.js';
+// Builds a lesson session (a queue of exercises) for any language course.
+// Sentence/word fields: `t` is the target language, `en` is English.
 import { tokenize } from './answer.js';
 import { shuffle, sample, pick } from './random.js';
 
@@ -7,118 +7,99 @@ const canListen = () =>
   import.meta.env.VITE_SPEAK !== 'off' &&
   typeof window !== 'undefined' && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
-const sentenceKey = (s) => `s:${s.es}`;
-const wordKey = (w) => `w:${w.es}`;
+function makeBuilder(course) {
+  const tok = (text, side) => (side === 't' ? tokenize(text, { lang: course.tts, nospace: course.nospace, keep: [course.kobe] }) : tokenize(text));
+  const joiner = (side) => (side === 't' && course.nospace ? '' : ' ');
 
-function distractorTiles(answerTokens, pool, n) {
-  const used = new Set(answerTokens);
-  const candidates = [...new Set(pool.flatMap(tokenize))].filter((t) => !used.has(t));
-  return sample(candidates, n);
-}
+  function tilesExercise(sentence, from, pool, type = 'tiles') {
+    const to = from === 't' ? 'en' : 't';
+    const answerTokens = tok(sentence[to], to);
+    const used = new Set(answerTokens);
+    const candidates = [...new Set(pool.flatMap((s) => tok(s[to], to)))].filter((x) => !used.has(x));
+    const extra = sample(candidates, Math.min(4, Math.max(2, 7 - answerTokens.length)));
+    return {
+      type,
+      key: sentence.id,
+      from,
+      prompt: sentence[from],
+      answer: sentence[to],
+      accepted: to === 'en' ? [sentence.en, ...(sentence.enAlt || [])] : [sentence.t],
+      joiner: joiner(to),
+      tiles: shuffle([...answerTokens, ...extra]).map((text, id) => ({ id, text })),
+    };
+  }
 
-function tilesExercise(sentence, from, pool, type = 'tiles') {
-  const to = from === 'es' ? 'en' : 'es';
-  const answerTokens = tokenize(sentence[to]);
-  const extra = distractorTiles(answerTokens, pool.map((s) => s[to]), Math.min(4, Math.max(2, 7 - answerTokens.length)));
-  return {
-    type,
-    key: sentenceKey(sentence),
-    from,
-    prompt: sentence[from],
-    answer: sentence[to],
-    accepted: [sentence[to], ...(sentence[`${to}Alt`] || [])],
-    tiles: shuffle([...answerTokens, ...extra]).map((text, id) => ({ id, text })),
-  };
-}
-
-function selectExercise(word, pool) {
-  const others = sample(pool.filter((w) => w.es !== word.es && w.emoji), 2);
-  return {
+  const select = (word, pool) => ({
     type: 'select',
-    key: wordKey(word),
+    key: word.id,
     prompt: word.en,
-    answer: word.es,
-    options: shuffle([word, ...others]).map((w) => ({ id: w.es, label: w.es, emoji: w.emoji })),
-  };
-}
+    answer: word.id,
+    answerText: word.t,
+    options: shuffle([word, ...sample(pool.filter((w) => w.id !== word.id && w.emoji), 2)]).map((w) => ({ id: w.id, label: w.t, emoji: w.emoji })),
+  });
 
-function matchExercise(words) {
-  return {
+  const match = (words) => ({
     type: 'match',
-    key: `m:${words.map((w) => w.es).join('|')}`,
-    left: shuffle(words.map((w) => ({ id: w.es, label: w.en }))),
-    right: shuffle(words.map((w) => ({ id: w.es, label: w.es }))),
-  };
+    key: `m:${words.map((w) => w.id).join('|')}`,
+    left: shuffle(words.map((w) => ({ id: w.id, label: w.en }))),
+    right: shuffle(words.map((w) => ({ id: w.id, label: w.t }))),
+  });
+
+  const type = (sentence) => ({
+    type: 'type', key: sentence.id, from: 't', prompt: sentence.t, answer: sentence.en, accepted: [sentence.en, ...(sentence.enAlt || [])],
+  });
+
+  const speakEx = (sentence) => ({ type: 'speak', key: sentence.id, prompt: sentence.t, answer: sentence.t });
+
+  const listen = (sentence, pool) => ({ ...tilesExercise(sentence, 'en', pool, 'listen'), audio: sentence.t, prompt: sentence.t });
+
+  return { tilesExercise, select, match, type, speakEx, listen };
 }
 
-function typeExercise(sentence, from) {
-  const to = from === 'es' ? 'en' : 'es';
-  return {
-    type: 'type',
-    key: sentenceKey(sentence),
-    from,
-    prompt: sentence[from],
-    answer: sentence[to],
-    accepted: [sentence[to], ...(sentence[`${to}Alt`] || [])],
-  };
-}
-
-function speakExercise(sentence) {
-  return { type: 'speak', key: sentenceKey(sentence), prompt: sentence.es, answer: sentence.es };
-}
-
-function listenExercise(sentence, pool) {
-  const ex = tilesExercise(sentence, 'en', pool, 'listen');
-  return { ...ex, audio: sentence.es, prompt: sentence.es };
-}
-
-function unitPool(lesson) {
-  const sameUnit = allLessons.filter((l) => l.unitId === lesson.unitId);
-  return {
-    words: sameUnit.flatMap((l) => l.words),
-    sentences: sameUnit.flatMap((l) => l.sentences),
-  };
-}
-
-export function buildLessonSession(lesson) {
-  const pool = unitPool(lesson);
+export function buildLessonSession(course, lesson) {
+  const b = makeBuilder(course);
+  const unit = course.allLessons.filter((l) => l.unitId === lesson.unitId);
+  const poolW = unit.flatMap((l) => l.words);
+  const poolS = unit.flatMap((l) => l.sentences);
   const words = shuffle(lesson.words);
   const sents = shuffle(lesson.sentences);
+  const w = (i) => words[i % words.length];
   const s = (i) => sents[i % sents.length];
 
   return [
-    selectExercise(words[0], pool.words),
-    selectExercise(words[1], pool.words),
-    tilesExercise(s(0), 'es', pool.sentences),
-    listenExercise(s(1), pool.sentences),
-    matchExercise(words.slice(0, 5)),
-    tilesExercise(s(2), 'en', pool.sentences),
-    selectExercise(words[2], pool.words),
-    canListen() ? speakExercise(s(3)) : tilesExercise(s(3), 'es', pool.sentences),
-    listenExercise(s(4), pool.sentences),
-    typeExercise(pick(sents), 'es'),
+    b.select(w(0), poolW),
+    b.select(w(1), poolW),
+    b.tilesExercise(s(0), 't', poolS),
+    b.listen(s(1), poolS),
+    b.match(words.slice(0, 5)),
+    b.tilesExercise(s(2), 'en', poolS),
+    b.select(w(2), poolW),
+    canListen() ? b.speakEx(s(3)) : b.tilesExercise(s(3), 't', poolS),
+    b.listen(s(4), poolS),
+    b.type(pick(sents)),
   ];
 }
 
 // Practice: weighted toward items the learner got wrong before.
-export function buildPracticeSession(completedLessonIds, weakKeys) {
-  const lessons = allLessons.filter((l) => completedLessonIds.includes(l.id));
+export function buildPracticeSession(course, completedLessonIds, weakKeys) {
+  const b = makeBuilder(course);
+  const lessons = course.allLessons.filter((l) => completedLessonIds.includes(l.id));
   if (!lessons.length) return null;
   const words = lessons.flatMap((l) => l.words);
   const sents = lessons.flatMap((l) => l.sentences);
-  const weakSents = sents.filter((s) => weakKeys.includes(sentenceKey(s)));
-  const weakWords = words.filter((w) => weakKeys.includes(wordKey(w)));
-  const chooseSent = () => (weakSents.length && Math.random() < 0.6 ? pick(weakSents) : pick(sents));
-  const chooseWord = () => (weakWords.length && Math.random() < 0.6 ? pick(weakWords) : pick(words));
+  const weakS = sents.filter((x) => weakKeys.includes(x.id));
+  const weakW = words.filter((x) => weakKeys.includes(x.id));
+  const chooseS = () => (weakS.length && Math.random() < 0.6 ? pick(weakS) : pick(sents));
+  const chooseW = () => (weakW.length && Math.random() < 0.6 ? pick(weakW) : pick(words));
 
   return [
-    selectExercise(chooseWord(), words),
-    tilesExercise(chooseSent(), 'es', sents),
-    listenExercise(chooseSent(), sents),
-    matchExercise(sample(words, 5)),
-    tilesExercise(chooseSent(), 'en', sents),
-    selectExercise(chooseWord(), words),
-    typeExercise(chooseSent(), 'es'),
-    listenExercise(chooseSent(), sents),
+    b.select(chooseW(), words),
+    b.tilesExercise(chooseS(), 't', sents),
+    b.listen(chooseS(), sents),
+    b.match(sample(words, Math.min(5, words.length))),
+    b.tilesExercise(chooseS(), 'en', sents),
+    b.select(chooseW(), words),
+    b.type(chooseS()),
+    b.listen(chooseS(), sents),
   ];
 }

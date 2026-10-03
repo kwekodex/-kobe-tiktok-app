@@ -3,7 +3,8 @@ import { useStore, HEART_REFILL_COST } from '../lib/store.jsx';
 import { checkAnswer } from '../lib/answer.js';
 import { sfx } from '../lib/sound.js';
 import { pick } from '../lib/random.js';
-import { findLesson } from '../data/course.js';
+import { useCourse } from '../lib/courses.js';
+import { courseCompleted } from '../lib/store.jsx';
 import Kobe from './Kobe.jsx';
 import Select from './exercises/Select.jsx';
 import Translate from './exercises/Translate.jsx';
@@ -17,7 +18,8 @@ const COMBO_LINES = { 3: '3 in a row! Woof!', 5: '5 in a row! You are on fire!',
 
 export default function Lesson({ session, onExit }) {
   const { state, dispatch } = useStore();
-  const lesson = session.lessonId ? findLesson(session.lessonId) : null;
+  const course = useCourse();
+  const lesson = session.lessonId ? course.findLesson(session.lessonId) : null;
   const total = session.exercises.length;
 
   const [queue, setQueue] = useState(session.exercises);
@@ -39,7 +41,7 @@ export default function Lesson({ session, onExit }) {
   const result = useMemo(() => {
     if (!done) return null;
     const perfect = mistakes === 0;
-    const base = session.practice ? 10 : state.completed[session.lessonId] ? 5 : 10;
+    const base = session.practice ? 10 : courseCompleted(state)[session.lessonId] ? 5 : 10;
     return { xp: base + (perfect ? 5 : 0), perfect, accuracy: Math.round((total / (total + mistakes)) * 100) };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [done]);
@@ -75,7 +77,7 @@ export default function Lesson({ session, onExit }) {
       setMistakes((m) => m + 1);
       setCombo(0);
       setComboMsg(null);
-      setFeedback({ title: 'Correct solution:', detail: ex.answer });
+      setFeedback({ title: 'Correct solution:', detail: ex.answerText ?? ex.answer });
       dispatch({ type: 'markWeak', key: ex.key });
       if (!session.practice) dispatch({ type: 'loseHeart' });
       setQueue((q) => [...q, { ...ex, retry: true }]); // try it again at the end
@@ -179,7 +181,7 @@ export default function Lesson({ session, onExit }) {
           ) : (
             <button className="btn btn-ghost" disabled={ex.type === 'match'} onClick={() => {
               setStatus('wrong'); setMistakes((m) => m + 1); setCombo(0);
-              setFeedback({ title: 'Correct solution:', detail: ex.answer });
+              setFeedback({ title: 'Correct solution:', detail: ex.answerText ?? ex.answer });
               dispatch({ type: 'markWeak', key: ex.key });
               setQueue((q) => [...q, { ...ex, retry: true }]);
             }}>Skip</button>

@@ -3,17 +3,25 @@ import Kobe from '../Kobe.jsx';
 import { speak } from '../../lib/speech.js';
 import { normalize } from '../../lib/answer.js';
 import { sfx } from '../../lib/sound.js';
+import { useCourse } from '../../lib/courses.js';
 
 const Recognition = typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition);
 
 // Share of the expected words the learner said (accent-insensitive).
-function score(expected, heard) {
+function score(expected, heard, course) {
+  if (course.nospace) {
+    // Compare characters for languages written without spaces.
+    const want = [...normalize(expected).replace(/\s/g, '')];
+    const got = normalize(heard).replace(/\s/g, '');
+    return want.filter((ch) => got.includes(ch)).length / want.length;
+  }
   const want = normalize(expected, { accents: false }).split(' ');
   const got = new Set(normalize(heard, { accents: false }).split(' '));
   return want.filter((w) => got.has(w)).length / want.length;
 }
 
 export default function Speak({ ex, onComplete }) {
+  const course = useCourse();
   const [listening, setListening] = useState(false);
   const [heard, setHeard] = useState('');
   const [message, setMessage] = useState(null);
@@ -26,7 +34,7 @@ export default function Speak({ ex, onComplete }) {
     if (!Recognition || listening) return;
     const rec = new Recognition();
     recRef.current = rec;
-    rec.lang = 'es-ES';
+    rec.lang = course.tts;
     rec.interimResults = true;
     rec.maxAlternatives = 3;
     let finalText = '';
@@ -43,7 +51,7 @@ export default function Speak({ ex, onComplete }) {
     rec.onend = () => {
       setListening(false);
       if (!finalText) return;
-      if (score(ex.answer, finalText) >= 0.7) {
+      if (score(ex.answer, finalText, course) >= 0.7) {
         setPassed(true);
         setMessage(null);
         onComplete();
@@ -65,7 +73,7 @@ export default function Speak({ ex, onComplete }) {
         <Kobe mood={passed ? 'happy' : listening ? 'think' : 'idle'} size={110} />
         <div className="bubble bubble-left">
           <button className="speaker-mini" onClick={() => speak(ex.prompt)} aria-label="Listen">🔊</button>
-          <span className="prompt-text">{ex.prompt}</span>
+          <span className="prompt-text" lang={course.tts} dir={course.rtl ? "rtl" : undefined}>{ex.prompt}</span>
         </div>
       </div>
       <button className={`mic ${listening ? 'live' : ''}`} onClick={start} disabled={passed}>

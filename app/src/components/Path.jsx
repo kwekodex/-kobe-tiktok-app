@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { course, allLessons } from '../data/course.js';
-import { useStore } from '../lib/store.jsx';
+import { useCourse } from '../lib/courses.js';
+import { useStore, courseCompleted } from '../lib/store.jsx';
+import Flag from './Flag.jsx';
 import Kobe from './Kobe.jsx';
 import { sfx } from '../lib/sound.js';
 
@@ -8,12 +9,16 @@ const OFFSETS = [0, 44, 70, 44, 0, -44, -70, -44];
 
 export default function Path({ onStart }) {
   const { state } = useStore();
+  const course = useCourse();
+  const { allLessons } = course;
+  const completed = courseCompleted(state);
   const [open, setOpen] = useState(null);
-  const currentIndex = allLessons.findIndex((l) => !state.completed[l.id]);
+  const currentIndex = allLessons.findIndex((l) => !completed[l.id]);
   const noHearts = state.hearts <= 0;
 
   return (
     <div className="path" onClick={() => setOpen(null)}>
+      <div className="course-head"><Flag lang={course} size="lg" /><div><h1>{course.name}</h1><span className="muted">{course.native}{course.beta ? " · Beta" : ""}</span></div></div>
       {course.units.map((unit, ui) => (
         <section key={unit.id} className="unit">
           <div className="unit-banner" style={{ background: unit.color }}>
@@ -26,7 +31,7 @@ export default function Path({ onStart }) {
           <div className="unit-nodes">
             {unit.lessons.map((lesson, li) => {
               const gi = allLessons.findIndex((l) => l.id === lesson.id);
-              const done = !!state.completed[lesson.id];
+              const done = !!completed[lesson.id];
               const current = gi === currentIndex;
               const locked = !done && !current;
               const offset = OFFSETS[(gi) % OFFSETS.length];
@@ -53,7 +58,7 @@ export default function Path({ onStart }) {
                         <p>Complete all levels above to unlock this!</p>
                       ) : (
                         <>
-                          <p>Lesson {li + 1} of {unit.lessons.length}{done ? ` · completed ×${state.completed[lesson.id]}` : ''}</p>
+                          <p>Lesson {li + 1} of {unit.lessons.length}{done ? ` · completed ×${completed[lesson.id]}` : ''}</p>
                           <button className="btn btn-white btn-wide" disabled={noHearts} onClick={() => onStart(lesson.id)}>
                             {noHearts ? 'No hearts left' : done ? 'Practice +5 XP' : 'Start +10 XP'}
                           </button>

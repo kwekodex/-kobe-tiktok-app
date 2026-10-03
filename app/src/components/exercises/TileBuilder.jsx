@@ -2,11 +2,11 @@
 import { useEffect, useState } from 'react';
 import { sfx } from '../../lib/sound.js';
 
-export default function TileBuilder({ tiles, onChange, disabled }) {
+export default function TileBuilder({ tiles, onChange, disabled, joiner = ' ', lang, rtl }) {
   const [chosen, setChosen] = useState([]);
 
   useEffect(() => {
-    onChange(chosen.map((id) => tiles[id].text).join(' '));
+    onChange(chosen.map((id) => tiles[id].text).join(joiner));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chosen]);
 
@@ -14,13 +14,13 @@ export default function TileBuilder({ tiles, onChange, disabled }) {
   const remove = (id) => { if (!disabled) { sfx.tap(); setChosen((c) => c.filter((x) => x !== id)); } };
 
   return (
-    <div className="tiles">
-      <div className="answer-line">
+    <div className="tiles" lang={lang}>
+      <div className="answer-line" dir={rtl ? "rtl" : undefined}>
         {chosen.map((id) => (
           <button key={id} className="tile" onClick={() => remove(id)} disabled={disabled}>{tiles[id].text}</button>
         ))}
       </div>
-      <div className="bank">
+      <div className="bank" dir={rtl ? "rtl" : undefined}>
         {tiles.map((t) => (
           <span key={t.id} className="tile-slot">
             {chosen.includes(t.id) ? (

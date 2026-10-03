@@ -3,6 +3,7 @@ import Kobe from './Kobe.jsx';
 import { useStore } from '../lib/store.jsx';
 import { api } from '../lib/api.js';
 import { sfx } from '../lib/sound.js';
+import LanguageGrid from './LanguageGrid.jsx';
 
 const GOALS = [
   { xp: 10, label: 'Casual', note: '5 min / day' },
@@ -13,15 +14,17 @@ const GOALS = [
 const AVATARS = ['🐶', '🐱', '🦊', '🐼', '🐨', '🐸', '🦁', '🐰'];
 
 export default function Onboarding() {
-  const { dispatch } = useStore();
+  const { state, dispatch } = useStore();
   const [step, setStep] = useState(0);
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState('🐶');
   const [goal, setGoal] = useState(20);
+  const [course, setCourse] = useState(null);
   const [busy, setBusy] = useState(false);
 
   const lines = [
-    "G'day! I'm Kobe. Let's learn Spanish together!",
+    "G'day! I'm Kobe. Let's learn a new language together!",
+    'Which language do you want to learn?',
     'What should I call you?',
     "How much do you want to practice each day? I'll keep you on track!",
   ];
@@ -32,7 +35,7 @@ export default function Onboarding() {
     const user = remote
       ? { ...remote, online: true }
       : { id: crypto.randomUUID(), name: name.trim(), avatar, joinedAt: new Date().toISOString(), online: false };
-    dispatch({ type: 'signup', user, dailyGoal: goal });
+    dispatch({ type: 'signup', user, dailyGoal: goal, course });
   }
 
   return (
@@ -52,7 +55,13 @@ export default function Onboarding() {
         )}
 
         {step === 1 && (
-          <form className="onboarding-body" onSubmit={(e) => { e.preventDefault(); if (name.trim()) setStep(2); }}>
+          <div className="onboarding-body">
+            <LanguageGrid selected={course} onPick={(code) => { setCourse(code); setStep(2); }} />
+          </div>
+        )}
+
+        {step === 2 && (
+          <form className="onboarding-body" onSubmit={(e) => { e.preventDefault(); if (name.trim()) setStep(3); }}>
             <input className="input" autoFocus maxLength={30} placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
             <div className="avatar-row">
               {AVATARS.map((a) => (
@@ -63,7 +72,7 @@ export default function Onboarding() {
           </form>
         )}
 
-        {step === 2 && (
+        {step === 3 && (
           <div className="onboarding-body">
             <div className="goal-list">
               {GOALS.map((g) => (

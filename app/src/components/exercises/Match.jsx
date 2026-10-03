@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { sfx } from '../../lib/sound.js';
 import { speak } from '../../lib/speech.js';
+import { useCourse } from '../../lib/courses.js';
 
 export default function Match({ ex, onComplete }) {
+  const course = useCourse();
   const [sel, setSel] = useState(null); // { side, id }
   const [matched, setMatched] = useState([]);
   const [wrong, setWrong] = useState(null);
@@ -44,7 +46,7 @@ export default function Match({ ex, onComplete }) {
           {ex.left.map((it) => <button key={it.id} className={cls('left', it.id)} onClick={() => choose('left', it)}>{it.label}</button>)}
         </div>
         <div className="match-col">
-          {ex.right.map((it) => <button key={it.id} className={cls('right', it.id)} onClick={() => choose('right', it)}>{it.label}</button>)}
+          {ex.right.map((it) => <button key={it.id} lang={course.tts} dir={course.rtl ? 'rtl' : undefined} className={cls('right', it.id)} onClick={() => choose('right', it)}>{it.label}</button>)}
         </div>
       </div>
     </div>
