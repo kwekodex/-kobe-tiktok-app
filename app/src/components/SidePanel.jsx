@@ -25,7 +25,7 @@ export default function SidePanel({ setTab }) {
   return (
     <aside className="side">
       <div className="panel me-card">
-        <Avatar id={state.user.avatar} size={56} animate />
+        <Avatar id={state.user.avatar} size={60} full animate />
         <div>
           <strong>{state.user.name}</strong>
           <span className="muted">as {avatarInfo(state.user.avatar).name} · {state.totalXp} XP</span>

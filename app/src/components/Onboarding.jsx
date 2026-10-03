@@ -85,7 +85,7 @@ export default function Onboarding() {
             <div className={`buddy-stage ${buddy ? 'picked' : ''}`}>
               {buddy ? (
                 <>
-                  <Avatar key={buddy.id} id={buddy.id} size={120} animate className="buddy-pop" />
+                  <Avatar key={buddy.id} id={buddy.id} size={120} full animate className="buddy-pop" />
                   <div className="buddy-hello"><strong>Hi, I'm {buddy.name}!</strong><span className="muted">I'll be you on the leaderboard.</span></div>
                 </>
               ) : (
@@ -102,7 +102,7 @@ export default function Onboarding() {
                   className={`buddy ${avatar === a.id ? 'on' : ''}`}
                   onClick={() => { sfx.tap(); setAvatar(a.id); }}
                 >
-                  <Avatar id={a.id} size={62} animate={avatar === a.id} />
+                  <Avatar id={a.id} size={62} full animate={avatar === a.id} />
                   <span>{a.name}</span>
                 </button>
               ))}

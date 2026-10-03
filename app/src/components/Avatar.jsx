@@ -150,15 +150,70 @@ const ART = {
 };
 
 // mood: 'idle' (default) | 'happy' (hop) | 'sad' (droop) | 'cheer' (big jump)
-export default function Avatar({ id, size = 48, className = '', animate = false, mood, title }) {
+// Full-body bodies: the same chubby sitting pose as Kobe (200 x 220 space).
+// main = coat, belly = tummy, paws = front paws, legs = back legs (defaults to main).
+const TAILS = {
+  cat: { d: 'M140 180 C168 176 176 150 164 132 C158 124 150 130 156 138 C164 150 158 166 138 170 Z', c: '#f0a45c', stripes: '#c9762f' },
+  fox: { d: 'M136 186 C176 192 196 158 182 130 C172 112 156 122 162 140 C168 160 152 172 132 172 Z', c: '#e57a3d', tip: { cx: 180, cy: 128, rx: 12, ry: 10 } },
+  bunny: { cotton: { cx: 148, cy: 188, r: 11 }, c: '#fffaf2' },
+  lion: { d: 'M142 186 C164 190 176 178 176 160', stroke: '#e0ad4d', tuft: { cx: 177, cy: 156, r: 9, c: '#c97d35' } },
+  bear: { cotton: { cx: 146, cy: 190, r: 8 }, c: '#a8713f' },
+  hamster: { cotton: { cx: 146, cy: 192, r: 6 }, c: '#f0c48d' },
+};
+const BODIES = {
+  cat: { main: '#f0a45c', belly: '#fff4e6', paws: '#fff4e6' },
+  fox: { main: '#e57a3d', belly: '#fff7ee', paws: '#3a3133', legs: '#e57a3d' },
+  panda: { main: '#fbfaf7', belly: '#fbfaf7', paws: '#33373f', legs: '#33373f', arms: '#33373f' },
+  koala: { main: '#a2abb5', belly: '#ece7e1', paws: '#8f98a3' },
+  bunny: { main: '#f3e9d8', belly: '#fffaf2', paws: '#fffaf2' },
+  penguin: { main: '#323844', belly: '#fbfaf7', paws: '#f2a63a', legs: '#323844', flippers: '#323844', feet: true },
+  lion: { main: '#efc160', belly: '#fff4dc', paws: '#efc160' },
+  frog: { main: '#82c46f', belly: '#d9efc8', paws: '#82c46f', bigFeet: true },
+  bear: { main: '#a8713f', belly: '#ecceaa', paws: '#a8713f', pads: '#ecceaa' },
+  hamster: { main: '#f0c48d', belly: '#fff8ef', paws: '#f6b8b0' },
+};
+
+function bodyParts(animal) {
+  const b = BODIES[animal];
+  const legs = b.legs || b.main;
+  const parts = [];
+  const t = TAILS[animal];
+  if (t?.d && !t.stroke) parts.push({ s: 'p', d: t.d, c: t.c });
+  if (t?.stripes) parts.push({ s: 'p', d: 'M158 140 l8 -2 M162 152 l8 0 M156 164 l7 3', stroke: t.stripes });
+  if (t?.tip) parts.push({ s: 'e', ...t.tip, c: '#fff7ee' });
+  if (t?.stroke) parts.push({ s: 'p', d: t.d, stroke: t.stroke, width: 7 }, { s: 'c', cx: t.tuft.cx, cy: t.tuft.cy, r: t.tuft.r, c: t.tuft.c });
+  parts.push(
+    { s: 'e', cx: 62, cy: 195, rx: 19, ry: 12, c: legs },
+    { s: 'e', cx: 138, cy: 195, rx: 19, ry: 12, c: legs },
+    { s: 'e', cx: 100, cy: 170, rx: 50, ry: 38, c: b.main },
+  );
+  if (t?.cotton) parts.push({ s: 'c', cx: t.cotton.cx, cy: t.cotton.cy, r: t.cotton.r, c: t.c });
+  if (b.arms) parts.push({ s: 'e', cx: 64, cy: 168, rx: 14, ry: 22, c: b.arms, rot: 20 }, { s: 'e', cx: 136, cy: 168, rx: 14, ry: 22, c: b.arms, rot: -20 });
+  if (b.flippers) parts.push({ s: 'e', cx: 52, cy: 170, rx: 10, ry: 26, c: b.flippers, rot: 25 }, { s: 'e', cx: 148, cy: 170, rx: 10, ry: 26, c: b.flippers, rot: -25 });
+  parts.push({ s: 'e', cx: 100, cy: 172, rx: 28, ry: 29, c: b.belly });
+  if (b.feet) {
+    parts.push({ s: 'e', cx: 84, cy: 207, rx: 15, ry: 6, c: b.paws, plain: true }, { s: 'e', cx: 116, cy: 207, rx: 15, ry: 6, c: b.paws, plain: true });
+  } else if (b.bigFeet) {
+    parts.push({ s: 'e', cx: 80, cy: 204, rx: 18, ry: 9, c: b.paws }, { s: 'e', cx: 120, cy: 204, rx: 18, ry: 9, c: b.paws });
+  } else {
+    parts.push({ s: 'e', cx: 84, cy: 203, rx: 13, ry: 9, c: b.paws }, { s: 'e', cx: 116, cy: 203, rx: 13, ry: 9, c: b.paws });
+  }
+  if (b.pads) parts.push({ s: 'e', cx: 84, cy: 205, rx: 6, ry: 4, c: b.pads, soft: true }, { s: 'e', cx: 116, cy: 205, rx: 6, ry: 4, c: b.pads, soft: true });
+  return parts;
+}
+
+// full: draw the whole sitting body (like Kobe) instead of just the face.
+export default function Avatar({ id, size = 48, className = '', animate = false, mood, full = false, title }) {
   const info = avatarInfo(id);
   const art = ART[info.id];
   const uid = useId().replace(/:/g, '');
   const ref = (n) => `${n}-${uid}`;
-  const colours = [...new Set(art.parts.filter((p) => !p.soft && !p.plain).map((p) => p.c))];
+  const body = full ? bodyParts(info.id) : [];
+  const colours = [...new Set([...art.parts, ...body].filter((p) => p.c && !p.soft && !p.plain).map((p) => p.c))];
   const grad = (c) => `url(#${ref('g' + c.slice(1))})`;
 
   const shape = (p, i) => {
+    if (p.stroke) return <path key={i} d={p.d} fill="none" stroke={p.stroke} strokeWidth={p.width || 3} strokeLinecap="round" filter={p.width ? `url(#${ref('fuzz')})` : undefined} />;
     const fill = p.soft || p.plain ? p.c : grad(p.c);
     const filter = p.soft ? `url(#${ref('soft')})` : p.plain ? undefined : `url(#${ref('fuzz')})`;
     const common = { fill, filter };
@@ -172,10 +227,10 @@ export default function Avatar({ id, size = 48, className = '', animate = false,
 
   return (
     <svg
-      className={`avatar-art ${animate ? 'av-animate' : ''} ${mood ? `av-mood-${mood}` : ''} ${className}`}
+      className={`avatar-art ${full ? 'av-full' : ''} ${animate ? 'av-animate' : ''} ${mood ? `av-mood-${mood}` : ''} ${className}`}
       width={size}
-      height={size}
-      viewBox="0 0 120 120"
+      height={full ? size * 1.1 : size}
+      viewBox={full ? '0 0 200 220' : '0 0 120 120'}
       role="img"
       aria-label={title || `${info.name} the ${info.animal}`}
     >
@@ -198,7 +253,10 @@ export default function Avatar({ id, size = 48, className = '', animate = false,
           </radialGradient>
         ))}
       </defs>
+      {full && <ellipse cx="100" cy="212" rx="54" ry="6" fill="#000" opacity="0.1" filter={`url(#${ref('blur')})`} />}
       <g className="av-body">
+        {full && body.map((p, i) => shape(p, `b${i}`))}
+        <g transform={full ? 'translate(7 -10) scale(1.55)' : undefined}>
         {art.parts.map(shape)}
         {/* rosy cheeks */}
         <g filter={`url(#${ref('blur')})`} opacity="0.7">
@@ -223,6 +281,7 @@ export default function Avatar({ id, size = 48, className = '', animate = false,
         ) : (
           <path d={`M55 ${(art.nose?.y ?? 78) + 5} Q60 ${(art.nose?.y ?? 78) + 9} 65 ${(art.nose?.y ?? 78) + 5}`} fill="none" stroke="#4a3f45" strokeWidth="2.2" strokeLinecap="round" />
         )}
+        </g>
       </g>
     </svg>
   );

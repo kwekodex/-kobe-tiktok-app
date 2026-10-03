@@ -14,3 +14,9 @@
 .av-mood-sad .av-eyes { transform-origin: 60px 64px; transform: translateY(2px) scaleY(.75); }
 @keyframes av-hop { 0%, 100% { transform: translateY(0) scale(1.04, .96); } 45% { transform: translateY(-10px) scale(.97, 1.03); } }
 @keyframes av-cheer { 0%, 100% { transform: translateY(0) rotate(0) scale(1.05, .95); } 35% { transform: translateY(-18px) rotate(-8deg); } 65% { transform: translateY(-12px) rotate(8deg); } }
+/* full-body buddies pivot from their feet, like Kobe */
+.av-full .av-body { transform-origin: 100px 212px; }
+.av-full.av-animate .av-body { transform-origin: 100px 212px; animation-name: av-bob-full; }
+@keyframes av-bob-full { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.015, .985) translateY(-1px); } }
+.av-full.av-mood-happy .av-body, .av-full.av-mood-cheer .av-body, .av-full.av-mood-sad .av-body { transform-origin: 100px 212px; }
+.avatar-art .av-eyes { transform-box: fill-box; transform-origin: center; }

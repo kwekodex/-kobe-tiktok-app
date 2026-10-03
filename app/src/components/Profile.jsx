@@ -30,7 +30,7 @@ export default function Profile() {
   return (
     <div className="page">
       <div className="profile-head">
-        <span className="profile-avatar"><Avatar id={state.user.avatar} size={84} animate /></span>
+        <span className="profile-avatar"><Avatar id={state.user.avatar} size={84} full animate /></span>
         <div>
           <h1>{state.user.name}</h1>
           <p className="muted">Joined {new Date(state.user.joinedAt).toLocaleDateString()} · {state.user.online ? 'Synced ☁️' : 'Saved on this device'}</p>
@@ -81,7 +81,7 @@ export default function Profile() {
             className={`buddy ${state.user.avatar === a.id ? 'on' : ''}`}
             onClick={() => dispatch({ type: 'setUser', user: { avatar: a.id } })}
           >
-            <Avatar id={a.id} size={54} animate={state.user.avatar === a.id} />
+            <Avatar id={a.id} size={54} full animate={state.user.avatar === a.id} />
             <span>{a.name}</span>
           </button>
         ))}

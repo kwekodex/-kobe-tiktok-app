@@ -132,7 +132,7 @@ export default function Lesson({ session, onExit }) {
       <div className="lesson complete">
         <div className="celebrate">
           <Kobe mood="cheer" size={180} />
-          <Avatar id={state.user.avatar} size={110} mood="cheer" className="celebrate-buddy" />
+          <Avatar id={state.user.avatar} size={150} full mood="cheer" className="celebrate-buddy" />
         </div>
         <h1 className="complete-title">{session.practice ? 'Practice complete!' : 'Lesson complete!'}</h1>
         {result.perfect && <p className="muted">Perfect lesson! Kobe and {avatarInfo(state.user.avatar).name} are doing zoomies.</p>}
@@ -178,7 +178,7 @@ export default function Lesson({ session, onExit }) {
           {feedback ? (
             <div className="feedback">
               <span className="feedback-buddy">
-                <Avatar id={state.user.avatar} size={60} mood={status === 'correct' ? 'happy' : 'sad'} />
+                <Avatar id={state.user.avatar} size={60} full mood={status === 'correct' ? 'happy' : 'sad'} />
                 <span className="feedback-badge">{status === 'correct' ? '✔' : '✖'}</span>
               </span>
               <div>

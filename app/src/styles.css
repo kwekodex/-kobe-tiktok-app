@@ -435,3 +435,9 @@ h1, h2, h3 { margin: 0 0 .5rem; font-weight: 900; }
 .celebrate { display: flex; align-items: flex-end; justify-content: center; gap: 4px; }
 .celebrate-buddy { margin-bottom: 6px; }
 .start-tag { display: flex; align-items: center; gap: 6px; padding: 4px 12px 4px 6px; top: -50px; }
+/* full-body buddies */
+.feedback-buddy { background: none; border-radius: 0; height: 72px; }
+.feedback-badge { right: -2px; bottom: 2px; }
+.profile-avatar { border-radius: 24px; align-items: end; }
+.profile-avatar svg { margin-top: 4px; }
+@media (max-width: 640px) { .feedback-buddy { height: 64px; } .feedback-buddy svg { width: 54px; height: 59px; } }
