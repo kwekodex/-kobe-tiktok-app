@@ -2,10 +2,7 @@
 // Sentence/word fields: `t` is the target language, `en` is English.
 import { tokenize } from './answer.js';
 import { shuffle, sample, pick } from './random.js';
-
-const canListen = () =>
-  import.meta.env.VITE_SPEAK !== 'off' &&
-  typeof window !== 'undefined' && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+import { canRecognize as canListen } from './listen.js';
 
 function makeBuilder(course) {
   const tok = (text, side) => (side === 't' ? tokenize(text, { lang: course.tts, nospace: course.nospace, keep: [course.kobe] }) : tokenize(text));
@@ -102,4 +99,15 @@ export function buildPracticeSession(course, completedLessonIds, weakKeys) {
     b.type(chooseS()),
     b.listen(chooseS(), sents),
   ];
+}
+
+// Sentences to read aloud: weak ones first, then others from finished lessons.
+// Before any lesson is finished, it uses the first lesson.
+export function buildSpeakSession(course, completedLessonIds, weakKeys, count = 5) {
+  let lessons = course.allLessons.filter((l) => completedLessonIds.includes(l.id));
+  if (!lessons.length) lessons = course.allLessons.slice(0, 1);
+  const sents = lessons.flatMap((l) => l.sentences);
+  const weak = shuffle(sents.filter((x) => weakKeys.includes(x.id)));
+  const rest = shuffle(sents.filter((x) => !weakKeys.includes(x.id)));
+  return [...weak.slice(0, 2), ...rest].slice(0, count);
 }

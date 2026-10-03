@@ -441,3 +441,37 @@ h1, h2, h3 { margin: 0 0 .5rem; font-weight: 900; }
 .profile-avatar { border-radius: 24px; align-items: end; }
 .profile-avatar svg { margin-top: 4px; }
 @media (max-width: 640px) { .feedback-buddy { height: 64px; } .feedback-buddy svg { width: 54px; height: 59px; } }
+
+/* speaking practice */
+.spoken { display: inline-flex; flex-wrap: wrap; gap: 0 .3em; }
+.spoken.tight { gap: 0 2px; }
+.spoken .sw-ok { color: var(--success-dark); background: color-mix(in srgb, var(--success) 16%, transparent); border-radius: 6px; padding: 0 3px; }
+.spoken .sw-miss { color: var(--danger); background: color-mix(in srgb, var(--danger) 14%, transparent); border-radius: 6px; padding: 0 3px; text-decoration: underline wavy; text-underline-offset: 4px; }
+.speak-bubble { display: flex; flex-direction: column; gap: 8px; }
+.speak-sentence { font-size: 1.3rem; font-weight: 800; line-height: 1.5; }
+.speak-meaning { font-size: .95rem; }
+.speak-play { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.speak-play .chip { padding: 5px 10px; font-size: .85rem; color: var(--ink); }
+.mic-big { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.mic-icon { font-size: 1.6rem; }
+.mic-wave { display: flex; justify-content: center; gap: 5px; height: 26px; align-items: center; }
+.mic-wave i { width: 5px; height: 100%; border-radius: 3px; background: var(--danger); animation: wave .9s ease-in-out infinite; }
+.mic-wave i:nth-child(2) { animation-delay: .15s; } .mic-wave i:nth-child(3) { animation-delay: .3s; }
+.mic-wave i:nth-child(4) { animation-delay: .45s; } .mic-wave i:nth-child(5) { animation-delay: .6s; }
+@keyframes wave { 0%, 100% { transform: scaleY(.25); } 50% { transform: scaleY(1); } }
+.feedback-badge.pct { width: auto; min-width: 26px; padding: 0 5px; border-radius: 10px; font-size: .72rem; font-weight: 900; right: -10px; }
+.practice-cards { display: grid; gap: 14px; width: 100%; max-width: 520px; margin-top: 10px; }
+.practice-card { display: flex; gap: 14px; align-items: center; text-align: left; border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 18px; padding: 16px; background: var(--surface); color: var(--ink); cursor: pointer; font: inherit; }
+.practice-card:hover:not(:disabled) { background: var(--sel-bg); }
+.practice-card:disabled { opacity: .55; cursor: default; }
+.practice-card .pc-icon { font-size: 2.2rem; flex: none; width: 52px; text-align: center; }
+.practice-card strong { display: block; font-size: 1.1rem; }
+.practice-card span { color: var(--ink-soft); font-size: .92rem; }
+.practice-card .pc-xp { margin-left: auto; color: var(--gold); font-weight: 900; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .mic-wave i { animation: none; } }
+.speak-practice .feedback { min-width: 0; flex: 1; }
+.speak-practice .feedback strong { font-size: 1.15rem; }
+.speak-practice .foot-inner > .btn { flex: none; }
+.prompt-text.spoken { text-decoration: none; }
+.speak-bubble { flex: 1; min-width: 0; }
+.speak-play { flex-direction: row; }

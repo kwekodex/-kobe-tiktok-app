@@ -6,6 +6,7 @@ Teaches **100 languages** from English, each with the same 4 units and 14 lesson
 ## Features
 - **Learning path:** units with zig-zag lesson nodes that unlock in order
 - **Exercises:** speaking (speech recognition, with "Can't speak now"), picture multiple choice, translate with word tiles (both directions), listen and tap (text-to-speech, with a slow 🐢 option), type the translation, and match pairs
+- **Speaking practice** (Practice hub): read sentences from your finished lessons out loud. Kobe plays each one first (normal or slow), listens with the browser's speech recognition in the course language, and marks every word green (said) or red (missed) with a clarity score. Sentences you struggle with come back first next time. Works in Chrome, Edge and Safari; no server or API key needed.
 - **Mistakes:** wrong answers return at the end of the lesson; answers are accent- and punctuation-tolerant
 - **Game loop:** XP, daily goal, streaks (with streak freezes), hearts (1 refills every 30 min), gems, combo messages
 - **Practice hub:** spaced review weighted toward items you got wrong; costs no hearts and earns one back
