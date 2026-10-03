@@ -80,7 +80,6 @@ export default function Profile() {
           </select>
         </label>
         <label className="check"><input type="checkbox" checked={state.sound} onChange={() => dispatch({ type: 'toggleSound' })} /> Sound effects</label>
-        <label className="check"><input id="kobe3d" type="checkbox" checked={state.kobe3d} onChange={() => dispatch({ type: 'toggleKobe3d' })} /> 3D Kobe (turn off on older phones)</label>
         {confirmReset ? (
           <div className="reset-confirm">
             <span>Erase all progress in every language on this device?</span>

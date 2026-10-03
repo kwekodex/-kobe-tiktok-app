@@ -13,7 +13,6 @@ Teaches **100 languages** from English, each with the same 4 units and 14 lesson
 - **Shop, profile, weekly XP chart, achievements**
 - **Voices:** pick any of your device's voices for each language, set speed and pitch, and preview it
 - **Studio voices:** with a cloud voice service configured on the server, every supported language gets several male and female voices (see below)
-- **3D Kobe:** a three.js model with the same moods; turns his head toward your finger and hops when tapped. Falls back to the flat drawing on devices without 3D
 - **Every writing system:** right-to-left scripts (Arabic, Hebrew, Persian, Urdu, Yiddish, Pashto), languages without spaces (Chinese, Japanese, Thai, Lao, Khmer, Burmese), and non-Latin scripts. Learners always type in English.
 - **Kobe's moods:** idle, happy, sad, cheer, think, sleep. He reacts to every answer.
 - **Offline-first:** progress lives in localStorage and syncs to the API when it's reachable

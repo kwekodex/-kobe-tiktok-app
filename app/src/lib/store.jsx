@@ -29,7 +29,6 @@ const initial = {
   voices: {}, // { [course]: voiceURI }
   speechRate: 1,
   speechPitch: 1,
-  kobe3d: false, // 3D Kobe is opt-in until the design is approved
   lessonsDone: 0,
   perfectLessons: 0,
   sound: true,
@@ -113,8 +112,6 @@ function reducer(state, action) {
       return { ...s, speechRate: action.rate };
     case 'setPitch':
       return { ...s, speechPitch: action.pitch };
-    case 'toggleKobe3d':
-      return { ...s, kobe3d: !s.kobe3d };
     case 'finishSession': {
       const { xp, lessonId, perfect } = action;
       const today = todayKey();
