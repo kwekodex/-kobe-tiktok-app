@@ -29,7 +29,7 @@ const initial = {
   voices: {}, // { [course]: voiceURI }
   speechRate: 1,
   speechPitch: 1,
-  kobe3d: true,
+  kobe3d: false, // 3D Kobe is opt-in until the design is approved
   lessonsDone: 0,
   perfectLessons: 0,
   sound: true,

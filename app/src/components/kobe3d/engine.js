@@ -290,7 +290,7 @@ function pose(rig, inst, t, dt) {
   s.pupilY = lerp(s.pupilY, pupilY, k);
 
   rig.root.position.y = s.hop;
-  rig.root.rotation.y = spin + inst.look.x * 0.18;
+  rig.root.rotation.y = spin + inst.look.x * 0.18 + (inst.yaw || 0);
   rig.body.scale.set(1 / Math.sqrt(breathe), breathe, 1);
   rig.head.rotation.set(s.headX, s.headY, s.headZ);
   rig.tail.rotation.set(0.3, 0, wag);
@@ -416,6 +416,9 @@ function createEngine() {
         inst.mood = mood;
         inst.moodSince = performance.now() / 1000;
       }
+    },
+    setYaw(inst, yaw) {
+      inst.yaw = yaw;
     },
     boop(inst) {
       inst.boopAt = performance.now() / 1000;
