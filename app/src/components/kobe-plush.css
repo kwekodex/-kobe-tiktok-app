@@ -1,0 +1,29 @@
+.kplush { display: block; overflow: visible; }
+.kplush g { transform-box: view-box; }
+.kplush .kp-root { transform-origin: 100px 210px; animation: kp-breathe 3s ease-in-out infinite; }
+.kplush .kp-head { transform-origin: 100px 140px; animation: kp-tilt 6s ease-in-out infinite; }
+.kplush .kp-ear-l { transform-origin: 54px 64px; animation: kp-ear-l 3s ease-in-out infinite; }
+.kplush .kp-ear-r { transform-origin: 146px 64px; animation: kp-ear-r 3s ease-in-out infinite; }
+.kplush .kp-eyes { transform-origin: 100px 94px; animation: kp-blink 4.5s infinite; }
+.kplush .kp-eyes-happy, .kplush .kp-eyes-closed, .kplush .kp-open, .kplush .kp-zzz { display: none; }
+
+.kplush.mood-happy .kp-root { animation: kp-hop 0.8s ease-in-out infinite; }
+.kplush.mood-happy .kp-eyes, .kplush.mood-happy .kp-smile { display: none; }
+.kplush.mood-happy .kp-eyes-happy, .kplush.mood-happy .kp-open { display: inline; }
+.kplush.mood-happy .kp-ear-l, .kplush.mood-happy .kp-ear-r { animation-duration: 0.8s; }
+
+.kplush.mood-sleep .kp-root { animation: kp-breathe 4.5s ease-in-out infinite; }
+.kplush.mood-sleep .kp-head { animation: none; transform: translateY(5px) rotate(5deg); }
+.kplush.mood-sleep .kp-eyes { display: none; }
+.kplush.mood-sleep .kp-eyes-closed, .kplush.mood-sleep .kp-zzz { display: inline; }
+.kplush.mood-sleep .kp-zzz text { animation: kp-zzz 2.4s ease-in-out infinite; }
+.kplush.mood-sleep .kp-zzz text:nth-child(2) { animation-delay: 0.8s; }
+
+@keyframes kp-breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.012, 0.988); } }
+@keyframes kp-tilt { 0%, 65%, 100% { transform: rotate(0); } 75%, 88% { transform: rotate(-5deg); } }
+@keyframes kp-ear-l { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(4deg); } }
+@keyframes kp-ear-r { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-4deg); } }
+@keyframes kp-blink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+@keyframes kp-hop { 0%, 100% { transform: translateY(0) scale(1.04, 0.96); } 45% { transform: translateY(-16px) scale(0.97, 1.03); } }
+@keyframes kp-zzz { 0% { transform: translate(0, 0); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(8px, -14px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .kplush * { animation: none !important; } }
