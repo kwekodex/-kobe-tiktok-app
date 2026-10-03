@@ -6,6 +6,7 @@ import { pick } from '../lib/random.js';
 import { useCourse } from '../lib/courses.js';
 import { courseCompleted } from '../lib/store.jsx';
 import Kobe from './Kobe.jsx';
+import Avatar, { avatarInfo } from './Avatar.jsx';
 import Select from './exercises/Select.jsx';
 import Translate from './exercises/Translate.jsx';
 import Listen from './exercises/Listen.jsx';
@@ -129,9 +130,12 @@ export default function Lesson({ session, onExit }) {
     const secs = Math.round((Date.now() - startedAt.current) / 1000);
     return (
       <div className="lesson complete">
-        <Kobe mood="cheer" size={200} />
+        <div className="celebrate">
+          <Kobe mood="cheer" size={180} />
+          <Avatar id={state.user.avatar} size={110} mood="cheer" className="celebrate-buddy" />
+        </div>
         <h1 className="complete-title">{session.practice ? 'Practice complete!' : 'Lesson complete!'}</h1>
-        {result.perfect && <p className="muted">Perfect lesson! Kobe is doing zoomies.</p>}
+        {result.perfect && <p className="muted">Perfect lesson! Kobe and {avatarInfo(state.user.avatar).name} are doing zoomies.</p>}
         <div className="result-tiles">
           <div className="result-tile xp"><span>Total XP</span><strong>⚡ {result.xp}</strong></div>
           <div className="result-tile acc"><span>{result.accuracy >= 90 ? 'Amazing' : 'Good'}</span><strong>🎯 {result.accuracy}%</strong></div>
@@ -151,6 +155,9 @@ export default function Lesson({ session, onExit }) {
       <div className="lesson-top">
         <button className="icon-btn" onClick={() => setConfirmQuit(true)} aria-label="Quit">✕</button>
         <div className="progress"><div className="progress-fill" style={{ width: `${progress * 100}%` }} />
+          <span className="progress-buddy" style={{ left: `${progress * 100}%` }} aria-hidden="true">
+            <Avatar id={state.user.avatar} size={34} mood={status === 'correct' ? 'happy' : status === 'wrong' ? 'sad' : undefined} />
+          </span>
           {comboMsg && <span className="combo" key={combo}>{comboMsg}</span>}
         </div>
         <span className="stat stat-hearts">{session.practice ? '♾️' : `❤️ ${state.hearts}`}</span>
@@ -170,7 +177,10 @@ export default function Lesson({ session, onExit }) {
         <div className="foot-inner">
           {feedback ? (
             <div className="feedback">
-              <span className="feedback-icon">{status === 'correct' ? '✔' : '✖'}</span>
+              <span className="feedback-buddy">
+                <Avatar id={state.user.avatar} size={60} mood={status === 'correct' ? 'happy' : 'sad'} />
+                <span className="feedback-badge">{status === 'correct' ? '✔' : '✖'}</span>
+              </span>
               <div>
                 <strong>{feedback.title}</strong>
                 {feedback.detail && <div>{feedback.detail}</div>}

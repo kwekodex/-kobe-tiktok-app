@@ -7,3 +7,10 @@
 @keyframes av-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
 @keyframes av-ears { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(4deg); } }
 @media (prefers-reduced-motion: reduce) { .avatar-art * { animation: none !important; } }
+/* moods */
+.av-mood-happy .av-body { transform-origin: 60px 110px; animation: av-hop .7s ease-in-out infinite; }
+.av-mood-cheer .av-body { transform-origin: 60px 110px; animation: av-cheer 1s ease-in-out infinite; }
+.av-mood-sad .av-body { transform-origin: 60px 110px; transform: translateY(4px) rotate(-6deg) scale(.96); transition: transform .3s; }
+.av-mood-sad .av-eyes { transform-origin: 60px 64px; transform: translateY(2px) scaleY(.75); }
+@keyframes av-hop { 0%, 100% { transform: translateY(0) scale(1.04, .96); } 45% { transform: translateY(-10px) scale(.97, 1.03); } }
+@keyframes av-cheer { 0%, 100% { transform: translateY(0) rotate(0) scale(1.05, .95); } 35% { transform: translateY(-18px) rotate(-8deg); } 65% { transform: translateY(-12px) rotate(8deg); } }

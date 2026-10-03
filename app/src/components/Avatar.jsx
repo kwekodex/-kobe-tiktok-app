@@ -149,7 +149,8 @@ const ART = {
   },
 };
 
-export default function Avatar({ id, size = 48, className = '', animate = false, title }) {
+// mood: 'idle' (default) | 'happy' (hop) | 'sad' (droop) | 'cheer' (big jump)
+export default function Avatar({ id, size = 48, className = '', animate = false, mood, title }) {
   const info = avatarInfo(id);
   const art = ART[info.id];
   const uid = useId().replace(/:/g, '');
@@ -171,7 +172,7 @@ export default function Avatar({ id, size = 48, className = '', animate = false,
 
   return (
     <svg
-      className={`avatar-art ${animate ? 'av-animate' : ''} ${className}`}
+      className={`avatar-art ${animate ? 'av-animate' : ''} ${mood ? `av-mood-${mood}` : ''} ${className}`}
       width={size}
       height={size}
       viewBox="0 0 120 120"

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useCourse } from '../lib/courses.js';
 import { useStore, courseCompleted } from '../lib/store.jsx';
 import Flag from './Flag.jsx';
+import Avatar from './Avatar.jsx';
 import Kobe from './Kobe.jsx';
 import { sfx } from '../lib/sound.js';
 
@@ -37,7 +38,12 @@ export default function Path({ onStart }) {
               const offset = OFFSETS[(gi) % OFFSETS.length];
               return (
                 <div key={lesson.id} className="node-wrap" style={{ transform: `translateX(${offset}px)` }}>
-                  {current && <div className="start-tag">START</div>}
+                  {current && (
+                    <div className="start-tag">
+                      <Avatar id={state.user.avatar} size={28} mood="happy" />
+                      <span>START</span>
+                    </div>
+                  )}
                   <button
                     className={`node ${done ? 'done' : ''} ${current ? 'current' : ''} ${locked ? 'locked' : ''}`}
                     style={{ '--unit': unit.color }}

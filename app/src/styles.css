@@ -418,3 +418,20 @@ h1, h2, h3 { margin: 0 0 .5rem; font-weight: 900; }
 .me-card { display: flex; align-items: center; gap: 12px; }
 .me-card div { display: flex; flex-direction: column; }
 .profile-buddies { margin-bottom: 8px; }
+
+/* buddy in lessons + path */
+.lesson-top .progress { margin-top: 14px; }
+.progress-buddy {
+  position: absolute; top: 50%; transform: translate(-50%, -62%); transition: left .45s cubic-bezier(.3,.7,.4,1.3);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.18)); pointer-events: none;
+}
+.feedback-buddy { position: relative; flex: none; display: grid; place-items: center; width: 68px; height: 68px; border-radius: 50%; background: var(--bg); }
+.feedback-badge {
+  position: absolute; right: -4px; bottom: -2px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  font-size: .9rem; color: #fff; background: var(--success);
+}
+.lesson-foot.wrong .feedback-badge { background: var(--danger); }
+@media (max-width: 640px) { .feedback-buddy { width: 56px; height: 56px; } .feedback-buddy svg { width: 50px; height: 50px; } }
+.celebrate { display: flex; align-items: flex-end; justify-content: center; gap: 4px; }
+.celebrate-buddy { margin-bottom: 6px; }
+.start-tag { display: flex; align-items: center; gap: 6px; padding: 4px 12px 4px 6px; top: -50px; }
