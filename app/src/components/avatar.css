@@ -1,0 +1,9 @@
+.avatar-art { display: block; overflow: visible; flex: none; }
+.avatar-art g { transform-box: view-box; }
+.av-animate .av-body { transform-origin: 60px 104px; animation: av-bob 1.8s ease-in-out infinite; }
+.av-animate .av-eyes { transform-origin: 60px 62px; animation: av-blink 3.8s infinite; }
+.av-animate .av-ears { transform-origin: 60px 46px; animation: av-ears 2.4s ease-in-out infinite; }
+@keyframes av-bob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-4px) rotate(-3deg); } }
+@keyframes av-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+@keyframes av-ears { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(4deg); } }
+@media (prefers-reduced-motion: reduce) { .avatar-art * { animation: none !important; } }
