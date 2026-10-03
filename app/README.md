@@ -1,11 +1,11 @@
 # KobeLingo 🐾
 
 A Duolingo-style language learning app starring Kobe the Aussie (an animated SVG mascot).
-Currently teaches **Spanish for English speakers**: 3 units, 11 lessons.
+Currently teaches **Spanish for English speakers**: 4 units, 14 lessons.
 
 ## Features
 - **Learning path:** units with zig-zag lesson nodes that unlock in order
-- **Exercises:** picture multiple choice, translate with word tiles (both directions), listen and tap (text-to-speech, with a slow 🐢 option), type the translation, and match pairs
+- **Exercises:** speaking (speech recognition, with "Can't speak now"), picture multiple choice, translate with word tiles (both directions), listen and tap (text-to-speech, with a slow 🐢 option), type the translation, and match pairs
 - **Mistakes:** wrong answers return at the end of the lesson; answers are accent- and punctuation-tolerant
 - **Game loop:** XP, daily goal, streaks (with streak freezes), hearts (1 refills every 30 min), gems, combo messages
 - **Practice hub:** spaced review weighted toward items you got wrong; costs no hearts and earns one back
@@ -13,6 +13,7 @@ Currently teaches **Spanish for English speakers**: 3 units, 11 lessons.
 - **Shop, profile, weekly XP chart, achievements**
 - **Kobe's moods:** idle, happy, sad, cheer, think, sleep. He reacts to every answer.
 - **Offline-first:** progress lives in localStorage and syncs to the API when it's reachable
+- **Installable (PWA):** "Add to Home Screen" on iPhone/Android, works offline after first visit
 
 ## Run it
 ```bash
@@ -24,6 +25,13 @@ Production:
 ```bash
 npm run build && npm start   # serves the app + API on :3001
 ```
+
+## Deploy (GitHub Pages)
+`.github/workflows/pages.yml` builds the app on every push to `main` and publishes:
+- `/` the existing policy page and TikTok verification file
+- `/learn/` KobeLingo (static, `VITE_API=off`: progress stays on the device, leagues use practice buddies)
+
+One-time setup: repo **Settings → Pages → Source: GitHub Actions**.
 
 ## Structure
 ```
@@ -43,5 +51,5 @@ Add a lesson to `src/data/course.js` with 5 `words` (each needs `es`, `en`, `emo
 ## Roadmap
 - Real auth (email / Google / Apple sign-in) and a Postgres database
 - Mobile apps (React Native / Expo) sharing `course.js` and `exercises.js`
-- Recorded audio, speaking exercises (speech recognition), more courses
+- Recorded audio, more courses
 - League promotion/demotion, friends, push notifications for streak reminders

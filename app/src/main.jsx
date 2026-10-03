@@ -11,3 +11,10 @@ createRoot(document.getElementById('root')).render(
     </StoreProvider>
   </StrictMode>,
 );
+
+// Installable + offline (skipped in dev so Vite hot reload isn't cached).
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => { /* unsupported context */ });
+  });
+}

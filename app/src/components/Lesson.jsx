@@ -10,6 +10,7 @@ import Translate from './exercises/Translate.jsx';
 import Listen from './exercises/Listen.jsx';
 import TypeIt from './exercises/TypeIt.jsx';
 import Match from './exercises/Match.jsx';
+import Speak from './exercises/Speak.jsx';
 
 const PRAISE = ['Nice!', 'Great job!', 'Excellent!', 'Correct!', 'Awesome!', 'Bonzer!'];
 const COMBO_LINES = { 3: '3 in a row! Woof!', 5: '5 in a row! You are on fire!', 8: '8 in a row! Legendary!' };
@@ -50,7 +51,8 @@ export default function Lesson({ session, onExit }) {
     if (session.practice) dispatch({ type: 'gainHeart' });
   }, [result, dispatch, session]);
 
-  const canCheck = status === 'answer' && ex && ex.type !== 'match' && value.trim().length > 0;
+  const autoChecked = ex && (ex.type === 'match' || ex.type === 'speak');
+  const canCheck = status === 'answer' && !autoChecked && value.trim().length > 0;
 
   const check = useCallback(() => {
     if (!canCheck) return;
@@ -89,7 +91,17 @@ export default function Lesson({ session, onExit }) {
     setFeedback(null);
   }, [status, idx, queue.length]);
 
+  // "Can't speak now": skip this and any later speaking exercises, no penalty.
+  const skipSpeaking = () => {
+    const later = queue.slice(idx + 1).filter((q) => q.type === 'speak').length;
+    setQueue((q) => [...q.slice(0, idx + 1), ...q.slice(idx + 1).filter((x) => x.type !== 'speak')]);
+    setStatus('correct');
+    setCorrectCount((c) => c + 1 + later);
+    setFeedback({ title: "No problem! We'll skip speaking for now." });
+  };
+
   const matchDone = useCallback(() => {
+    sfx.correct();
     setStatus('correct');
     setCorrectCount((c) => c + 1);
     setFeedback({ title: pick(PRAISE) });
@@ -149,6 +161,7 @@ export default function Lesson({ session, onExit }) {
         {ex.type === 'listen' && <Listen key={idx} {...props} />}
         {ex.type === 'type' && <TypeIt key={idx} {...props} />}
         {ex.type === 'match' && <Match key={idx} ex={ex} onComplete={matchDone} />}
+        {ex.type === 'speak' && <Speak key={idx} ex={ex} onComplete={matchDone} />}
       </div>
 
       <footer className={`lesson-foot ${status}`}>
@@ -161,6 +174,8 @@ export default function Lesson({ session, onExit }) {
                 {feedback.detail && <div>{feedback.detail}</div>}
               </div>
             </div>
+          ) : ex.type === 'speak' ? (
+            <button className="btn btn-ghost" onClick={skipSpeaking}>Can't speak now</button>
           ) : (
             <button className="btn btn-ghost" disabled={ex.type === 'match'} onClick={() => {
               setStatus('wrong'); setMistakes((m) => m + 1); setCombo(0);

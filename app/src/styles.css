@@ -307,3 +307,15 @@ h1, h2, h3 { margin: 0 0 .5rem; font-weight: 900; }
 .settings { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
 .settings label { display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 280px; }
 .settings label.check { flex-direction: row; align-items: center; }
+
+/* speaking exercise */
+.mic {
+  align-self: center; border: 0; border-radius: 18px; padding: 18px 34px; font-size: 1.15rem; font-weight: 900; cursor: pointer;
+  background: var(--blue); color: #fff; box-shadow: 0 5px 0 var(--blue-dark);
+}
+.mic:active:not(:disabled) { transform: translateY(5px); box-shadow: none; }
+.mic.live { background: var(--danger); box-shadow: 0 5px 0 var(--danger-dark); animation: mic-pulse 1s ease-in-out infinite; }
+.mic:disabled { background: var(--success); box-shadow: 0 5px 0 var(--success-dark); cursor: default; }
+@keyframes mic-pulse { 50% { transform: scale(1.05); } }
+.heard { text-align: center; margin: 0; color: var(--ink-soft); }
+.heard.warn { color: var(--danger); }

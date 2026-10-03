@@ -241,6 +241,71 @@ export const course = {
         },
       ],
     },
+    {
+      id: 'u4',
+      title: "Kobe's Day Out",
+      description: 'Places, questions, and the weather',
+      color: '#9b6bc2',
+      lessons: [
+        {
+          id: 'u4l1',
+          title: 'Places',
+          icon: '🏖️',
+          words: [
+            { es: 'la playa', en: 'the beach', emoji: '🏖️' },
+            { es: 'la tienda', en: 'the store', emoji: '🏪' },
+            { es: 'la escuela', en: 'the school', emoji: '🏫' },
+            { es: 'el veterinario', en: 'the vet', emoji: '🩺' },
+            { es: 'la ciudad', en: 'the city', emoji: '🏙️' },
+          ],
+          sentences: [
+            { es: 'Kobe va a la playa', en: 'Kobe goes to the beach', enAlt: ['Kobe is going to the beach'] },
+            { es: 'La tienda está cerca', en: 'The store is near', enAlt: ['The store is close', 'The shop is near'] },
+            { es: 'Kobe no quiere ir al veterinario', en: 'Kobe does not want to go to the vet', enAlt: ["Kobe doesn't want to go to the vet"] },
+            { es: 'Mi escuela es grande', en: 'My school is big', enAlt: ['My school is large'] },
+            { es: 'Vivimos en la ciudad', en: 'We live in the city' },
+          ],
+        },
+        {
+          id: 'u4l2',
+          title: 'Questions',
+          icon: '❓',
+          words: [
+            { es: 'dónde', en: 'where', emoji: '📍' },
+            { es: 'qué', en: 'what', emoji: '❓' },
+            { es: 'quién', en: 'who', emoji: '🕵️' },
+            { es: 'cuándo', en: 'when', emoji: '🗓️' },
+            { es: 'cómo', en: 'how', emoji: '🤔' },
+          ],
+          sentences: [
+            { es: 'Dónde está Kobe', en: 'Where is Kobe' },
+            { es: 'Qué come el perro', en: 'What does the dog eat', enAlt: ['What is the dog eating'] },
+            { es: 'Quién es tu amigo', en: 'Who is your friend' },
+            { es: 'Cómo estás', en: 'How are you' },
+            { es: 'Cuándo vamos al parque', en: 'When are we going to the park', enAlt: ['When do we go to the park'] },
+          ],
+        },
+        {
+          id: 'u4l3',
+          title: 'Weather',
+          icon: '🌦️',
+          words: [
+            { es: 'la lluvia', en: 'the rain', emoji: '🌧️' },
+            { es: 'la nieve', en: 'the snow', emoji: '❄️' },
+            { es: 'el viento', en: 'the wind', emoji: '💨' },
+            { es: 'la nube', en: 'the cloud', emoji: '☁️' },
+            { es: 'caliente', en: 'hot', emoji: '🔥' },
+          ],
+          sentences: [
+            { es: 'Hace mucho calor', en: 'It is very hot', enAlt: ["It's very hot"] },
+            { es: 'A Kobe le gusta la nieve', en: 'Kobe likes the snow', enAlt: ['Kobe likes snow'] },
+            { es: 'Hoy hay mucho viento', en: 'Today it is very windy', enAlt: ['It is very windy today', "It's very windy today"] },
+            { es: 'Kobe no sale con la lluvia', en: 'Kobe does not go out in the rain', enAlt: ["Kobe doesn't go out in the rain"] },
+            { es: 'Hay una nube en el cielo', en: 'There is a cloud in the sky' },
+          ],
+        },
+      ],
+    },
   ],
 };
 

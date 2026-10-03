@@ -3,6 +3,9 @@ import { allLessons } from '../data/course.js';
 import { tokenize } from './answer.js';
 import { shuffle, sample, pick } from './random.js';
 
+const canListen = () =>
+  typeof window !== 'undefined' && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
 const sentenceKey = (s) => `s:${s.es}`;
 const wordKey = (w) => `w:${w.es}`;
 
@@ -59,6 +62,10 @@ function typeExercise(sentence, from) {
   };
 }
 
+function speakExercise(sentence) {
+  return { type: 'speak', key: sentenceKey(sentence), prompt: sentence.es, answer: sentence.es };
+}
+
 function listenExercise(sentence, pool) {
   const ex = tilesExercise(sentence, 'en', pool, 'listen');
   return { ...ex, audio: sentence.es, prompt: sentence.es };
@@ -86,7 +93,7 @@ export function buildLessonSession(lesson) {
     matchExercise(words.slice(0, 5)),
     tilesExercise(s(2), 'en', pool.sentences),
     selectExercise(words[2], pool.words),
-    tilesExercise(s(3), 'es', pool.sentences),
+    canListen() ? speakExercise(s(3)) : tilesExercise(s(3), 'es', pool.sentences),
     listenExercise(s(4), pool.sentences),
     typeExercise(pick(sents), 'es'),
   ];

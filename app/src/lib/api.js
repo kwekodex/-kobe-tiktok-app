@@ -9,11 +9,13 @@ async function req(path, opts = {}) {
   return res.json();
 }
 
-const soft = (p) => p.catch(() => null);
+// Static hosting (e.g. GitHub Pages) has no API: build with VITE_API=off.
+const enabled = import.meta.env.VITE_API !== 'off';
+const soft = (p) => (enabled ? p() : Promise.resolve(null)).catch(() => null);
 
 export const api = {
-  createUser: (name, avatar) => soft(req('/users', { method: 'POST', body: { name, avatar } })),
-  getUser: (id) => soft(req(`/users/${id}`)),
-  saveState: (id, state) => soft(req(`/users/${id}/state`, { method: 'PUT', body: { state } })),
-  leaderboard: (id) => soft(req(`/leaderboard?userId=${encodeURIComponent(id)}`)),
+  createUser: (name, avatar) => soft(() => req('/users', { method: 'POST', body: { name, avatar } })),
+  getUser: (id) => soft(() => req(`/users/${id}`)),
+  saveState: (id, state) => soft(() => req(`/users/${id}/state`, { method: 'PUT', body: { state } })),
+  leaderboard: (id) => soft(() => req(`/leaderboard?userId=${encodeURIComponent(id)}`)),
 };
