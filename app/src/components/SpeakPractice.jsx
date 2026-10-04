@@ -8,6 +8,7 @@ import { grade, verdict, PASS } from '../lib/pronounce.js';
 import Kobe from './Kobe.jsx';
 import Avatar from './Avatar.jsx';
 import SpokenWords from './SpokenWords.jsx';
+import Reading from './Reading.jsx';
 
 // Read sentences out loud; Kobe marks each word you said right or missed.
 export default function SpeakPractice({ sentences, onExit }) {
@@ -105,6 +106,7 @@ export default function SpeakPractice({ sentences, onExit }) {
             <div className="bubble bubble-left speak-bubble">
               <div className="speak-sentence">
                 <SpokenWords text={s.t} result={result} course={course} />
+                <Reading text={s.t} />
               </div>
               <div className="speak-meaning muted">“{s.en}”</div>
               <div className="speak-play">

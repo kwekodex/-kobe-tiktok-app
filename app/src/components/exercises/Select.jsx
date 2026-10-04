@@ -1,6 +1,7 @@
 import { speak } from '../../lib/speech.js';
 import { sfx } from '../../lib/sound.js';
 import { useCourse } from '../../lib/courses.js';
+import Reading from '../Reading.jsx';
 
 export default function Select({ ex, value, onChange, disabled }) {
   const course = useCourse();
@@ -17,6 +18,7 @@ export default function Select({ ex, value, onChange, disabled }) {
           >
             <span className="card-emoji">{o.emoji}</span>
             <span className="card-label" lang={course.tts} dir={course.rtl ? "rtl" : undefined}>{o.label}</span>
+            <Reading text={o.label} />
             <span className="kbd">{i + 1}</span>
           </button>
         ))}

@@ -32,6 +32,7 @@ const initial = {
   lessonsDone: 0,
   perfectLessons: 0,
   sound: true,
+  showReading: true, // pronunciation guide under non-Latin scripts
 };
 
 function load() {
@@ -143,6 +144,8 @@ function reducer(state, action) {
       return { ...s, dailyGoal: action.goal };
     case 'toggleSound':
       return { ...s, sound: !s.sound };
+    case 'toggleReading':
+      return { ...s, showReading: !s.showReading };
     case 'reset':
       return { ...initial, heartsUpdatedAt: Date.now() };
     default:

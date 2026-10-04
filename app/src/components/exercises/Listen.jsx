@@ -17,7 +17,7 @@ export default function Listen({ ex, onChange, disabled }) {
         <button className="speaker big" onClick={() => speak(ex.audio)} aria-label="Play">🔊</button>
         <button className="speaker small" onClick={() => speak(ex.audio, { slow: true })} aria-label="Play slowly">🐢</button>
       </div>
-      <TileBuilder tiles={ex.tiles} onChange={onChange} disabled={disabled} joiner={ex.joiner} lang={course.tts} rtl={course.rtl} />
+      <TileBuilder tiles={ex.tiles} onChange={onChange} disabled={disabled} joiner={ex.joiner} lang={course.tts} rtl={course.rtl} target />
     </div>
   );
 }

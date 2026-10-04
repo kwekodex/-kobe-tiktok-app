@@ -7,6 +7,7 @@ import { useCourse } from '../lib/courses.js';
 import { courseCompleted } from '../lib/store.jsx';
 import Kobe from './Kobe.jsx';
 import Avatar, { avatarInfo } from './Avatar.jsx';
+import Reading from './Reading.jsx';
 import Select from './exercises/Select.jsx';
 import Translate from './exercises/Translate.jsx';
 import Listen from './exercises/Listen.jsx';
@@ -184,6 +185,7 @@ export default function Lesson({ session, onExit }) {
               <div>
                 <strong>{feedback.title}</strong>
                 {feedback.detail && <div>{feedback.detail}</div>}
+                {feedback.detail && <Reading text={feedback.detail} className="on-feedback" />}
               </div>
             </div>
           ) : ex.type === 'speak' ? (

@@ -5,6 +5,7 @@ import VoiceSettings from './VoiceSettings.jsx';
 import Avatar, { AVATARS, avatarInfo } from './Avatar.jsx';
 import { todayKey } from '../lib/dates.js';
 import { DailyGoal } from './SidePanel.jsx';
+import { canRomanize } from '../lib/romanize.js';
 
 const ACHIEVEMENTS = [
   { id: 'first', icon: '🐣', name: 'First steps', test: (s) => s.lessonsDone >= 1, desc: 'Complete a lesson' },
@@ -99,6 +100,9 @@ export default function Profile() {
           </select>
         </label>
         <label className="check"><input type="checkbox" checked={state.sound} onChange={() => dispatch({ type: 'toggleSound' })} /> Sound effects</label>
+        {canRomanize(course.code) && (
+          <label className="check"><input type="checkbox" checked={state.showReading} onChange={() => dispatch({ type: 'toggleReading' })} /> Show pronunciation in English letters</label>
+        )}
         {confirmReset ? (
           <div className="reset-confirm">
             <span>Erase all progress in every language on this device?</span>

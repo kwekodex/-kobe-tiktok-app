@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Kobe from '../Kobe.jsx';
 import SpokenWords from '../SpokenWords.jsx';
+import Reading from '../Reading.jsx';
 import { speak } from '../../lib/speech.js';
 import { sfx } from '../../lib/sound.js';
 import { useCourse } from '../../lib/courses.js';
@@ -25,7 +26,10 @@ export default function Speak({ ex, onComplete }) {
         <Kobe mood={passed ? 'happy' : mic.listening ? 'think' : 'idle'} size={110} />
         <div className="bubble bubble-left">
           <button className="speaker-mini" onClick={() => speak(ex.prompt)} aria-label="Listen">🔊</button>
-          <SpokenWords text={ex.prompt} result={result} course={course} />
+          <span className="prompt-stack">
+            <SpokenWords text={ex.prompt} result={result} course={course} />
+            <Reading text={ex.prompt} />
+          </span>
         </div>
       </div>
       <button className={`mic ${mic.listening ? 'live' : ''}`} onClick={mic.listening ? mic.stop : mic.start} disabled={passed}>

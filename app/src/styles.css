@@ -205,7 +205,7 @@ h1, h2, h3 { margin: 0 0 .5rem; font-weight: 900; }
 .ex-title { font-size: 1.7rem; }
 .prompt-text { text-decoration: underline dotted var(--ink-soft); text-underline-offset: 6px; }
 
-.select-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.select-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .card-option {
   position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 22px 8px 14px;
   border: 2px solid var(--line); border-bottom-width: 5px; border-radius: 16px; background: var(--tile-bg); cursor: pointer;
@@ -475,3 +475,17 @@ h1, h2, h3 { margin: 0 0 .5rem; font-weight: 900; }
 .prompt-text.spoken { text-decoration: none; }
 .speak-bubble { flex: 1; min-width: 0; }
 .speak-play { flex-direction: row; }
+
+/* pronunciation guide (romanization) */
+.reading { display: block; font-size: .78em; font-weight: 700; color: var(--ink-soft); letter-spacing: .01em; line-height: 1.25; }
+.prompt-stack { display: flex; flex-direction: column; gap: 2px; }
+.prompt-stack .reading { font-size: .8rem; }
+.tile .reading { font-size: .68rem; margin-top: 1px; }
+.tile-ghost .reading { color: transparent; }
+.tile { display: inline-flex; flex-direction: column; align-items: center; }
+.card-option .reading { font-size: .8rem; }
+.match-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 78px; }
+.match-btn .reading { font-size: .74rem; }
+.match-btn.on .reading { color: inherit; opacity: .8; }
+.reading.on-feedback { color: inherit; opacity: .8; font-size: .9rem; }
+.speak-sentence .reading { font-size: .85rem; margin-top: 2px; }
