@@ -1,0 +1,94 @@
+.kobe { overflow: visible; display: block; user-select: none; }
+.kobe g, .kobe path, .kobe circle, .kobe ellipse { transform-box: view-box; }
+
+/* default (idle) */
+.kobe .k-root { transform-origin: 100px 210px; animation: k-breathe 2.6s ease-in-out infinite; }
+.kobe .k-head { transform-origin: 100px 150px; animation: k-tilt 7s ease-in-out infinite; }
+.kobe .k-tail { transform-origin: 134px 186px; animation: k-wag 0.5s ease-in-out infinite alternate; }
+.kobe .k-ear-l { transform-origin: 58px 64px; animation: k-ear-l 2.6s ease-in-out infinite; }
+.kobe .k-ear-r { transform-origin: 142px 64px; animation: k-ear-r 2.6s ease-in-out infinite; }
+.kobe .k-eyes-open { transform-origin: 100px 88px; animation: k-blink 4.6s infinite; }
+.kobe .k-pupils { transition: transform 0.3s ease; }
+.kobe .k-shadow { transform-origin: 100px 212px; animation: k-shadow 2.6s ease-in-out infinite; }
+
+.kobe .k-eyes-happy, .kobe .k-eyes-closed, .kobe .k-tear, .kobe .k-brows-sad,
+.kobe .k-mouth-open, .kobe .k-mouth-sad, .kobe .k-zzz, .kobe .k-sparkles { display: none; }
+
+/* happy: hops, tongue out, fast wag */
+.kobe.mood-happy .k-root { animation: k-hop 0.7s cubic-bezier(.3,.7,.4,1) infinite; }
+.kobe.mood-happy .k-shadow { animation: k-shadow-hop 0.7s cubic-bezier(.3,.7,.4,1) infinite; }
+.kobe.mood-happy .k-tail { animation-duration: 0.14s; }
+.kobe.mood-happy .k-eyes-open, .kobe.mood-cheer .k-eyes-open { display: none; }
+.kobe.mood-happy .k-eyes-happy, .kobe.mood-cheer .k-eyes-happy { display: inline; }
+.kobe.mood-happy .k-mouth-smile, .kobe.mood-cheer .k-mouth-smile { display: none; }
+.kobe.mood-happy .k-mouth-open, .kobe.mood-cheer .k-mouth-open { display: inline; }
+.kobe.mood-happy .k-tongue, .kobe.mood-cheer .k-tongue { transform-origin: 100px 124px; animation: k-pant 0.3s ease-in-out infinite alternate; }
+
+/* cheer: big jump with a spin and sparkles */
+.kobe.mood-cheer .k-root { animation: k-cheer 1.1s cubic-bezier(.3,.7,.4,1) infinite; }
+.kobe.mood-cheer .k-shadow { animation: k-shadow-hop 1.1s cubic-bezier(.3,.7,.4,1) infinite; }
+.kobe.mood-cheer .k-tail { animation-duration: 0.12s; }
+.kobe.mood-cheer .k-sparkles { display: inline; }
+.kobe.mood-cheer .k-sparkles path { transform-box: fill-box; transform-origin: center; animation: k-sparkle 1.1s ease-in-out infinite; }
+.kobe.mood-cheer .k-sparkles path:nth-child(2) { animation-delay: 0.35s; }
+.kobe.mood-cheer .k-sparkles path:nth-child(3) { animation-delay: 0.7s; }
+
+/* sad: droopy ears, head down, tail still, a tear */
+.kobe.mood-sad .k-root { animation: k-breathe 3.6s ease-in-out infinite; }
+.kobe.mood-sad .k-head { animation: none; transform: translateY(5px) rotate(-4deg); transition: transform 0.4s; }
+.kobe.mood-sad .k-ear-l { animation: none; transform: rotate(14deg); transition: transform 0.4s; }
+.kobe.mood-sad .k-ear-r { animation: none; transform: rotate(-14deg); transition: transform 0.4s; }
+.kobe.mood-sad .k-tail { animation: none; transform: rotate(30deg); }
+.kobe.mood-sad .k-brows { display: none; }
+.kobe.mood-sad .k-brows-sad, .kobe.mood-sad .k-tear, .kobe.mood-sad .k-mouth-sad { display: inline; }
+.kobe.mood-sad .k-mouth-smile { display: none; }
+.kobe.mood-sad .k-pupils { transform: translateY(3px); }
+.kobe.mood-sad .k-tear { animation: k-tear 1.4s ease-in infinite; }
+
+/* think: curious head tilt, eyes look up */
+.kobe.mood-think .k-head { animation: k-curious 2.4s ease-in-out infinite; }
+.kobe.mood-think .k-pupils { transform: translate(2px, -3px); }
+.kobe.mood-think .k-ear-r { animation: k-perk 1.2s ease-in-out infinite; }
+
+/* sleep */
+.kobe.mood-sleep .k-root { animation: k-breathe 4s ease-in-out infinite; }
+.kobe.mood-sleep .k-head { animation: none; transform: translateY(8px) rotate(6deg); }
+.kobe.mood-sleep .k-tail { animation: none; }
+.kobe.mood-sleep .k-eyes-open { display: none; }
+.kobe.mood-sleep .k-eyes-closed, .kobe.mood-sleep .k-zzz { display: inline; }
+.kobe.mood-sleep .k-zzz text { animation: k-zzz 2s ease-in-out infinite; }
+.kobe.mood-sleep .k-zzz text:nth-child(2) { animation-delay: 0.6s; }
+
+@keyframes k-breathe { 0%,100% { transform: scale(1,1); } 50% { transform: scale(1.015,0.985); } }
+@keyframes k-shadow { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(1.03); } }
+@keyframes k-tilt { 0%,70%,100% { transform: rotate(0); } 78% { transform: rotate(-7deg); } 90% { transform: rotate(-7deg); } }
+@keyframes k-wag { from { transform: rotate(-16deg); } to { transform: rotate(18deg); } }
+@keyframes k-ear-l { 0%,100% { transform: rotate(0); } 50% { transform: rotate(5deg); } }
+@keyframes k-ear-r { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-5deg); } }
+@keyframes k-blink { 0%,93%,100% { transform: scaleY(1); } 96% { transform: scaleY(0.08); } }
+@keyframes k-hop {
+  0%,100% { transform: translateY(0) scale(1.06,0.94); }
+  35% { transform: translateY(-22px) scale(0.96,1.05); }
+  60% { transform: translateY(-14px) scale(1,1); }
+  85% { transform: translateY(0) scale(1.08,0.92); }
+}
+@keyframes k-shadow-hop { 0%,100%,85% { transform: scaleX(1); opacity: .12; } 35% { transform: scaleX(0.7); opacity: .06; } }
+@keyframes k-cheer {
+  0%,100% { transform: translateY(0) scale(1.08,0.92) rotate(0); }
+  30% { transform: translateY(-38px) scale(0.95,1.06) rotate(-8deg); }
+  55% { transform: translateY(-30px) rotate(8deg); }
+  85% { transform: translateY(0) scale(1.1,0.9) rotate(0); }
+}
+@keyframes k-pant { from { transform: scaleY(1); } to { transform: scaleY(1.15); } }
+@keyframes k-sparkle { 0%,100% { transform: scale(0) rotate(0); opacity: 0; } 50% { transform: scale(1.2) rotate(45deg); opacity: 1; } }
+@keyframes k-tear { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(18px); opacity: 0; } }
+@keyframes k-curious { 0%,100% { transform: rotate(-12deg); } 50% { transform: rotate(-8deg) translateY(-2px); } }
+@keyframes k-perk { 0%,100% { transform: rotate(0); } 50% { transform: rotate(8deg); } }
+@keyframes k-zzz { 0% { transform: translate(0,0); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(8px,-14px); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kobe *, .kobe { animation: none !important; }
+}
+
+.kobe.mood-happy .k-ear-l, .kobe.mood-cheer .k-ear-l { animation: k-ear-l 0.35s ease-in-out infinite; }
+.kobe.mood-happy .k-ear-r, .kobe.mood-cheer .k-ear-r { animation: k-ear-r 0.35s ease-in-out infinite; }

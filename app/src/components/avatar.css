@@ -1,0 +1,22 @@
+.avatar-art { display: block; overflow: visible; flex: none; }
+.avatar-art g { transform-box: view-box; }
+.av-animate .av-body { transform-origin: 60px 104px; animation: av-bob 1.8s ease-in-out infinite; }
+.av-animate .av-eyes { transform-origin: 60px 62px; animation: av-blink 3.8s infinite; }
+.av-animate .av-ears { transform-origin: 60px 46px; animation: av-ears 2.4s ease-in-out infinite; }
+@keyframes av-bob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-4px) rotate(-3deg); } }
+@keyframes av-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+@keyframes av-ears { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(4deg); } }
+@media (prefers-reduced-motion: reduce) { .avatar-art * { animation: none !important; } }
+/* moods */
+.av-mood-happy .av-body { transform-origin: 60px 110px; animation: av-hop .7s ease-in-out infinite; }
+.av-mood-cheer .av-body { transform-origin: 60px 110px; animation: av-cheer 1s ease-in-out infinite; }
+.av-mood-sad .av-body { transform-origin: 60px 110px; transform: translateY(4px) rotate(-6deg) scale(.96); transition: transform .3s; }
+.av-mood-sad .av-eyes { transform-origin: 60px 64px; transform: translateY(2px) scaleY(.75); }
+@keyframes av-hop { 0%, 100% { transform: translateY(0) scale(1.04, .96); } 45% { transform: translateY(-10px) scale(.97, 1.03); } }
+@keyframes av-cheer { 0%, 100% { transform: translateY(0) rotate(0) scale(1.05, .95); } 35% { transform: translateY(-18px) rotate(-8deg); } 65% { transform: translateY(-12px) rotate(8deg); } }
+/* full-body buddies pivot from their feet, like Kobe */
+.av-full .av-body { transform-origin: 100px 212px; }
+.av-full.av-animate .av-body { transform-origin: 100px 212px; animation-name: av-bob-full; }
+@keyframes av-bob-full { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.015, .985) translateY(-1px); } }
+.av-full.av-mood-happy .av-body, .av-full.av-mood-cheer .av-body, .av-full.av-mood-sad .av-body { transform-origin: 100px 212px; }
+.avatar-art .av-eyes { transform-box: fill-box; transform-origin: center; }
