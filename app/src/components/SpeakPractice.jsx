@@ -108,7 +108,7 @@ export default function SpeakPractice({ sentences, onExit }) {
                 <SpokenWords text={s.t} result={result} course={course} />
                 <Reading text={s.t} />
               </div>
-              <div className="speak-meaning muted">“{s.en}”</div>
+              <div className="speak-meaning muted" lang={course.from.tts} dir={course.from.rtl ? 'rtl' : undefined}>“{s.en}”</div>
               <div className="speak-play">
                 <button className="chip" onClick={() => speak(s.t)}>🔊 Play</button>
                 <button className="chip" onClick={() => speak(s.t, { slow: true })}>🐢 Slow</button>

@@ -29,6 +29,7 @@ export default function Speak({ ex, onComplete }) {
           <span className="prompt-stack">
             <SpokenWords text={ex.prompt} result={result} course={course} />
             <Reading text={ex.prompt} />
+            {ex.meaning && <span className="speak-meaning muted" lang={course.from.tts}>“{ex.meaning}”</span>}
           </span>
         </div>
       </div>

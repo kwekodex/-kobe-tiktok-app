@@ -1,12 +1,13 @@
 // Builds a lesson session (a queue of exercises) for any language course.
-// Sentence/word fields: `t` is the target language, `en` is English.
+// Sentence/word fields: `t` is the target language, `en` is the learner's own language.
 import { tokenize } from './answer.js';
 import { shuffle, sample, pick } from './random.js';
 import { canRecognize as canListen } from './listen.js';
 
 function makeBuilder(course) {
-  const tok = (text, side) => (side === 't' ? tokenize(text, { lang: course.tts, nospace: course.nospace, keep: [course.kobe] }) : tokenize(text));
-  const joiner = (side) => (side === 't' && course.nospace ? '' : ' ');
+  const lang = (side) => (side === 't' ? course : course.from);
+  const tok = (text, side) => tokenize(text, { lang: lang(side).tts, nospace: lang(side).nospace, keep: [lang(side).kobe] });
+  const joiner = (side) => (lang(side).nospace ? '' : ' ');
 
   function tilesExercise(sentence, from, pool, type = 'tiles') {
     const to = from === 't' ? 'en' : 't';
@@ -22,6 +23,8 @@ function makeBuilder(course) {
       answer: sentence[to],
       accepted: to === 'en' ? [sentence.en, ...(sentence.enAlt || [])] : [sentence.t],
       joiner: joiner(to),
+      t: sentence.t,
+      meaning: sentence.en,
       tiles: shuffle([...answerTokens, ...extra]).map((text, id) => ({ id, text })),
     };
   }
@@ -32,7 +35,9 @@ function makeBuilder(course) {
     prompt: word.en,
     answer: word.id,
     answerText: word.t,
-    options: shuffle([word, ...sample(pool.filter((w) => w.id !== word.id && w.emoji), 2)]).map((w) => ({ id: w.id, label: w.t, emoji: w.emoji })),
+    t: word.t,
+    meaning: word.en,
+    options: shuffle([word, ...sample(pool.filter((w) => w.id !== word.id && w.emoji), 2)]).map((w) => ({ id: w.id, label: w.t, emoji: w.emoji, en: w.en })),
   });
 
   const match = (words) => ({
@@ -44,9 +49,10 @@ function makeBuilder(course) {
 
   const type = (sentence) => ({
     type: 'type', key: sentence.id, from: 't', prompt: sentence.t, answer: sentence.en, accepted: [sentence.en, ...(sentence.enAlt || [])],
+    t: sentence.t, meaning: sentence.en,
   });
 
-  const speakEx = (sentence) => ({ type: 'speak', key: sentence.id, prompt: sentence.t, answer: sentence.t });
+  const speakEx = (sentence) => ({ type: 'speak', key: sentence.id, prompt: sentence.t, answer: sentence.t, t: sentence.t, meaning: sentence.en });
 
   const listen = (sentence, pool) => ({ ...tilesExercise(sentence, 'en', pool, 'listen'), audio: sentence.t, prompt: sentence.t });
 

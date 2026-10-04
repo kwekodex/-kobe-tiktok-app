@@ -24,6 +24,7 @@ const initial = {
   heartsUpdatedAt: Date.now(),
   gems: 500,
   course: null, // language code being learned
+  native: 'en', // the learner's own language, used for meanings and answers
   completed: {}, // { [course]: { [lessonId]: times completed } }
   weak: {}, // { [course]: exercise keys answered wrong recently }
   voices: {}, // { [course]: voiceURI }
@@ -88,7 +89,7 @@ function reducer(state, action) {
     case 'tick':
       return s;
     case 'signup':
-      return { ...s, user: action.user, dailyGoal: action.dailyGoal, course: action.course };
+      return { ...s, user: action.user, dailyGoal: action.dailyGoal, course: action.course, native: action.native || 'en' };
     case 'setUser':
       return { ...s, user: { ...s.user, ...action.user } };
     case 'loseHeart':
@@ -110,6 +111,8 @@ function reducer(state, action) {
       return { ...s, weak: { ...s.weak, [s.course]: (s.weak[s.course] || []).filter((k) => k !== action.key) } };
     case 'setCourse':
       return { ...s, course: action.course };
+    case 'setNative':
+      return { ...s, native: action.native };
     case 'setVoice':
       return { ...s, voices: { ...s.voices, [action.course]: action.voiceURI } };
     case 'setRate':

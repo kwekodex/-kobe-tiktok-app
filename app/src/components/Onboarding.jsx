@@ -12,7 +12,7 @@ const GOALS = [
   { xp: 30, label: 'Serious', note: '15 min a day', icon: '🌳' },
   { xp: 50, label: 'Intense', note: '20 min a day', icon: '🔥' },
 ];
-const STEPS = ['welcome', 'language', 'name', 'avatar', 'goal'];
+const STEPS = ['welcome', 'native', 'language', 'name', 'avatar', 'goal'];
 
 export default function Onboarding() {
   const { dispatch } = useStore();
@@ -21,12 +21,14 @@ export default function Onboarding() {
   const [avatar, setAvatar] = useState(null);
   const [goal, setGoal] = useState(20);
   const [course, setCourse] = useState(null);
+  const [native, setNative] = useState(null);
   const [busy, setBusy] = useState(false);
   const buddy = avatar ? avatarInfo(avatar) : null;
   const first = name.trim().split(' ')[0];
 
   const lines = {
     welcome: "G'day! I'm Kobe. Let's learn a new language together!",
+    native: 'First, which language do you speak? I\'ll show you what words mean in it.',
     language: 'Which language do you want to learn?',
     name: 'What should I call you?',
     avatar: `Nice to meet you, ${first}! Pick a buddy to be you in the app.`,
@@ -40,7 +42,7 @@ export default function Onboarding() {
     const user = remote
       ? { ...remote, avatar, online: true }
       : { id: crypto.randomUUID(), name: name.trim(), avatar, joinedAt: new Date().toISOString(), online: false };
-    dispatch({ type: 'signup', user, dailyGoal: goal, course });
+    dispatch({ type: 'signup', user, dailyGoal: goal, course, native });
   }
 
   return (
@@ -67,14 +69,20 @@ export default function Onboarding() {
           </div>
         )}
 
+        {key === 'native' && (
+          <div className="onboarding-body">
+            <LanguageGrid withEnglish selected={native} onPick={(code) => { setNative(code); if (course === code) setCourse(null); setStep(2); }} />
+          </div>
+        )}
+
         {key === 'language' && (
           <div className="onboarding-body">
-            <LanguageGrid selected={course} onPick={(code) => { setCourse(code); setStep(2); }} />
+            <LanguageGrid exclude={native} selected={course} onPick={(code) => { setCourse(code); setStep(3); }} />
           </div>
         )}
 
         {key === 'name' && (
-          <form className="onboarding-body" onSubmit={(e) => { e.preventDefault(); if (name.trim()) setStep(3); }}>
+          <form className="onboarding-body" onSubmit={(e) => { e.preventDefault(); if (name.trim()) setStep(4); }}>
             <input id="ob-name" className="input input-big" autoFocus maxLength={30} placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
             <button className="btn btn-primary btn-wide" disabled={!name.trim()}>Continue</button>
           </form>
@@ -107,7 +115,7 @@ export default function Onboarding() {
                 </button>
               ))}
             </div>
-            <button className="btn btn-primary btn-wide" disabled={!avatar} onClick={() => setStep(4)}>
+            <button className="btn btn-primary btn-wide" disabled={!avatar} onClick={() => setStep(5)}>
               {buddy ? `Continue as ${buddy.name}` : 'Choose a buddy'}
             </button>
           </div>

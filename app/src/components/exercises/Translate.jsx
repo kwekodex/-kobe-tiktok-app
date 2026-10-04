@@ -15,7 +15,7 @@ export function PromptBubble({ ex, mood }) {
           <button className="speaker-mini" onClick={() => speak(ex.prompt)} aria-label="Listen">🔊</button>
         )}
         <span className="prompt-stack">
-          <span className="prompt-text" lang={target ? course.tts : "en"} dir={target && course.rtl ? "rtl" : undefined}>{ex.prompt}</span>
+          <span className="prompt-text" lang={target ? course.tts : course.from.tts} dir={(target ? course.rtl : course.from.rtl) ? "rtl" : undefined}>{ex.prompt}</span>
           {target && <Reading text={ex.prompt} />}
         </span>
       </div>
@@ -28,10 +28,10 @@ export default function Translate({ ex, onChange, disabled, mood }) {
   const toTarget = ex.from !== 't';
   return (
     <div className="ex">
-      <h2 className="ex-title">Write this in {toTarget ? course.name : 'English'}</h2>
+      <h2 className="ex-title">Write this in {toTarget ? course.name : course.from.name}</h2>
       <PromptBubble ex={ex} mood={mood} />
       <TileBuilder tiles={ex.tiles} onChange={onChange} disabled={disabled} joiner={ex.joiner}
-        lang={toTarget ? course.tts : 'en'} rtl={toTarget && course.rtl} target={toTarget} />
+        lang={toTarget ? course.tts : course.from.tts} rtl={toTarget ? course.rtl : course.from.rtl} target={toTarget} />
     </div>
   );
 }

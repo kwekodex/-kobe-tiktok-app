@@ -31,11 +31,11 @@ export default function App() {
     if (!state.course) return;
     let alive = true;
     setLoadError(null);
-    loadCourse(state.course)
+    loadCourse(state.course, state.native)
       .then((c) => alive && setCourse(c))
       .catch((e) => alive && setLoadError(e.message));
     return () => { alive = false; };
-  }, [state.course]);
+  }, [state.course, state.native]);
 
   useEffect(() => {
     if (course) setSpeechConfig({ lang: course.tts, voiceURI: state.voices[course.code] || null, rate: state.speechRate, pitch: state.speechPitch });
@@ -43,7 +43,7 @@ export default function App() {
 
   if (!state.user || !state.course) return <Onboarding />;
 
-  if (!course || course.code !== state.course) {
+  if (!course || course.code !== state.course || course.nativeRequested !== state.native) {
     return (
       <div className="loading">
         <Kobe mood={loadError ? 'sad' : 'think'} size={140} />

@@ -6,6 +6,7 @@ import Avatar, { AVATARS, avatarInfo } from './Avatar.jsx';
 import { todayKey } from '../lib/dates.js';
 import { DailyGoal } from './SidePanel.jsx';
 import { canRomanize } from '../lib/romanize.js';
+import { languages, ENGLISH } from '../data/languages.js';
 
 const ACHIEVEMENTS = [
   { id: 'first', icon: '🐣', name: 'First steps', test: (s) => s.lessonsDone >= 1, desc: 'Complete a lesson' },
@@ -98,6 +99,12 @@ export default function Profile() {
           <select className="input" value={state.dailyGoal} onChange={(e) => dispatch({ type: 'setGoal', goal: Number(e.target.value) })}>
             {[10, 20, 30, 50].map((g) => <option key={g} value={g}>{g} XP</option>)}
           </select>
+        </label>
+        <label>I speak
+          <select className="input" value={state.native} onChange={(e) => dispatch({ type: 'setNative', native: e.target.value })}>
+            {[ENGLISH, ...languages].filter((l) => l.code !== state.course).map((l) => <option key={l.code} value={l.code}>{l.name} · {l.native}</option>)}
+          </select>
+          <span className="muted small">Meanings and answers use this language.</span>
         </label>
         <label className="check"><input type="checkbox" checked={state.sound} onChange={() => dispatch({ type: 'toggleSound' })} /> Sound effects</label>
         {canRomanize(course.code) && (

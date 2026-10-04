@@ -1,14 +1,18 @@
 import { useMemo, useState } from 'react';
 import { courseList } from '../lib/courses.js';
+import { ENGLISH } from '../data/languages.js';
 import Flag from './Flag.jsx';
 
 // Searchable grid of all courses. Used in onboarding and on the Languages tab.
-export default function LanguageGrid({ selected, onPick, progressFor }) {
+// `withEnglish` adds English at the top (for picking your own language);
+// `exclude` hides one language (you don't learn the language you already speak).
+export default function LanguageGrid({ selected, onPick, progressFor, withEnglish = false, exclude }) {
   const [query, setQuery] = useState('');
   const list = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q ? courseList.filter((l) => l.name.toLowerCase().includes(q) || l.native.toLowerCase().includes(q)) : courseList;
-  }, [query]);
+    const all = (withEnglish ? [{ ...ENGLISH, available: true }, ...courseList] : courseList).filter((l) => l.code !== exclude);
+    return q ? all.filter((l) => l.name.toLowerCase().includes(q) || l.native.toLowerCase().includes(q)) : all;
+  }, [query, withEnglish, exclude]);
 
   return (
     <div className="lang-picker">
@@ -16,7 +20,7 @@ export default function LanguageGrid({ selected, onPick, progressFor }) {
         id="lang-search"
         className="input"
         type="search"
-        placeholder={`Search ${courseList.length} languages`}
+        placeholder={`Search ${list.length} languages`}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
@@ -35,7 +39,7 @@ export default function LanguageGrid({ selected, onPick, progressFor }) {
               <span className="lang-native" dir={l.rtl ? 'rtl' : undefined}>{l.native}</span>
               <span className="lang-tags">
                 {!l.available && <span className="tag">Coming soon</span>}
-                {l.available && l.beta && <span className="tag">Beta</span>}
+                {l.available && l.beta && !withEnglish && <span className="tag">Beta</span>}
                 {done > 0 && <span className="tag tag-progress">{done} done</span>}
               </span>
             </button>

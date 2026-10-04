@@ -16,6 +16,17 @@ import Match from './exercises/Match.jsx';
 import Speak from './exercises/Speak.jsx';
 import Intro from './exercises/Intro.jsx';
 
+// After each answer: the sentence in the language being learned, how to say it, and what it means.
+function MeaningLine({ ex, course }) {
+  return (
+    <div className="feedback-meaning">
+      <span lang={course.tts} dir={course.rtl ? 'rtl' : undefined}>{ex.t}</span>
+      <Reading text={ex.t} className="on-feedback" />
+      <span className="fm-means" lang={course.from.tts} dir={course.from.rtl ? 'rtl' : undefined}>= {ex.meaning}</span>
+    </div>
+  );
+}
+
 const PRAISE = ['Nice!', 'Great job!', 'Excellent!', 'Correct!', 'Awesome!', 'Bonzer!'];
 const COMBO_LINES = { 3: '3 in a row! Woof!', 5: '5 in a row! You are on fire!', 8: '8 in a row! Legendary!' };
 
@@ -204,8 +215,11 @@ export default function Lesson({ session, onExit }) {
               </span>
               <div>
                 <strong>{feedback.title}</strong>
-                {feedback.detail && <div>{feedback.detail}</div>}
-                {feedback.detail && <Reading text={feedback.detail} className="on-feedback" />}
+                {ex.t && ex.meaning ? (
+                  <MeaningLine ex={ex} course={course} />
+                ) : feedback.detail && (
+                  <><div>{feedback.detail}</div><Reading text={feedback.detail} className="on-feedback" /></>
+                )}
               </div>
             </div>
           ) : ex.type === 'intro' ? (

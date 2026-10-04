@@ -26,7 +26,7 @@ export default function Intro({ ex }) {
               <strong lang={course.tts} dir={course.rtl ? 'rtl' : undefined}>{w.t}</strong>
               <Reading text={w.t} />
             </span>
-            <span className="intro-en">{w.en}</span>
+            <span className="intro-en" lang={course.from.tts} dir={course.from.rtl ? 'rtl' : undefined}>{w.en}</span>
             <span className="intro-play" aria-hidden="true">🔊</span>
           </button>
         ))}

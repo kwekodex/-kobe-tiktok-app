@@ -44,7 +44,7 @@ export default function Match({ ex, onComplete }) {
       <h2 className="ex-title">Tap the matching pairs</h2>
       <div className="match-grid">
         <div className="match-col">
-          {ex.left.map((it) => <button key={it.id} className={cls('left', it.id)} onClick={() => choose('left', it)}>{it.label}</button>)}
+          {ex.left.map((it) => <button key={it.id} lang={course.from.tts} dir={course.from.rtl ? 'rtl' : undefined} className={cls('left', it.id)} onClick={() => choose('left', it)}>{it.label}</button>)}
         </div>
         <div className="match-col">
           {ex.right.map((it) => <button key={it.id} lang={course.tts} dir={course.rtl ? 'rtl' : undefined} className={cls('right', it.id)} onClick={() => choose('right', it)}><span>{it.label}</span><Reading text={it.label} /></button>)}

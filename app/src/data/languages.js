@@ -109,4 +109,8 @@ export const languages = [
   L('la', 'Latin', 'Latina', null, 'la'),
 ];
 
+// The language the shared curriculum is written in; also the default native language.
+export const ENGLISH = L('en', 'English', 'English', '🇬🇧', 'en-US');
+
 export const findLanguage = (code) => languages.find((l) => l.code === code);
+export const findNative = (code) => (code === 'en' ? ENGLISH : findLanguage(code) || ENGLISH);
