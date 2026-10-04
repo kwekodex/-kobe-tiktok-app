@@ -14,6 +14,7 @@ import Listen from './exercises/Listen.jsx';
 import TypeIt from './exercises/TypeIt.jsx';
 import Match from './exercises/Match.jsx';
 import Speak from './exercises/Speak.jsx';
+import Intro from './exercises/Intro.jsx';
 
 const PRAISE = ['Nice!', 'Great job!', 'Excellent!', 'Correct!', 'Awesome!', 'Bonzer!'];
 const COMBO_LINES = { 3: '3 in a row! Woof!', 5: '5 in a row! You are on fire!', 8: '8 in a row! Legendary!' };
@@ -26,6 +27,7 @@ export default function Lesson({ session, onExit }) {
 
   const [queue, setQueue] = useState(session.exercises);
   const [idx, setIdx] = useState(0);
+  const [attempt, setAttempt] = useState(0); // bumps on "Try again" to reset the exercise
   const [value, setValue] = useState('');
   const [status, setStatus] = useState('answer'); // answer | correct | wrong
   const [feedback, setFeedback] = useState(null);
@@ -55,7 +57,7 @@ export default function Lesson({ session, onExit }) {
     if (session.practice) dispatch({ type: 'gainHeart' });
   }, [result, dispatch, session]);
 
-  const autoChecked = ex && (ex.type === 'match' || ex.type === 'speak');
+  const autoChecked = ex && (ex.type === 'match' || ex.type === 'speak' || ex.type === 'intro');
   const canCheck = status === 'answer' && !autoChecked && value.trim().length > 0;
 
   const check = useCallback(() => {
@@ -95,6 +97,22 @@ export default function Lesson({ session, onExit }) {
     setFeedback(null);
   }, [status, idx, queue.length]);
 
+  // Have another go at the same exercise right away. The mistake still counts,
+  // so the extra copy queued for the end of the lesson is no longer needed.
+  const retry = () => {
+    setQueue((q) => (q.length > idx + 1 && q[q.length - 1].key === ex.key && q[q.length - 1].retry ? q.slice(0, -1) : q));
+    setAttempt((a) => a + 1);
+    setValue('');
+    setStatus('answer');
+    setFeedback(null);
+  };
+
+  const finishIntro = () => {
+    setCorrectCount((c) => c + 1);
+    if (idx + 1 >= queue.length) { setDone(true); return; }
+    setIdx((i) => i + 1);
+  };
+
   // "Can't speak now": skip this and any later speaking exercises, no penalty.
   const skipSpeaking = () => {
     const later = queue.slice(idx + 1).filter((q) => q.type === 'speak').length;
@@ -116,7 +134,8 @@ export default function Lesson({ session, onExit }) {
     const onKey = (e) => {
       if (done || confirmQuit || outOfHearts) return;
       if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-        if (status === 'answer') check(); else next();
+        if (ex?.type === 'intro') finishIntro();
+        else if (status === 'answer') check(); else next();
       }
       if (ex?.type === 'select' && status === 'answer' && /^[1-9]$/.test(e.key)) {
         const o = ex.options[Number(e.key) - 1];
@@ -166,10 +185,11 @@ export default function Lesson({ session, onExit }) {
 
       <div className="lesson-body">
         {lesson && <div className="lesson-label">{lesson.title}{ex.retry ? ' · previous mistake' : ''}</div>}
-        {ex.type === 'select' && <Select key={idx} {...props} />}
-        {ex.type === 'tiles' && <Translate key={idx} {...props} />}
-        {ex.type === 'listen' && <Listen key={idx} {...props} />}
-        {ex.type === 'type' && <TypeIt key={idx} {...props} />}
+        {ex.type === 'intro' && <Intro key={idx} ex={ex} />}
+        {ex.type === 'select' && <Select key={`${idx}.${attempt}`} {...props} />}
+        {ex.type === 'tiles' && <Translate key={`${idx}.${attempt}`} {...props} />}
+        {ex.type === 'listen' && <Listen key={`${idx}.${attempt}`} {...props} />}
+        {ex.type === 'type' && <TypeIt key={`${idx}.${attempt}`} {...props} />}
         {ex.type === 'match' && <Match key={idx} ex={ex} onComplete={matchDone} />}
         {ex.type === 'speak' && <Speak key={idx} ex={ex} onComplete={matchDone} />}
       </div>
@@ -188,6 +208,8 @@ export default function Lesson({ session, onExit }) {
                 {feedback.detail && <Reading text={feedback.detail} className="on-feedback" />}
               </div>
             </div>
+          ) : ex.type === 'intro' ? (
+            <span />
           ) : ex.type === 'speak' ? (
             <button className="btn btn-ghost" onClick={skipSpeaking}>Can't speak now</button>
           ) : (
@@ -198,10 +220,17 @@ export default function Lesson({ session, onExit }) {
               setQueue((q) => [...q, { ...ex, retry: true }]);
             }}>Skip</button>
           )}
-          {status === 'answer' ? (
+          {ex.type === 'intro' ? (
+            <button className="btn btn-primary" autoFocus onClick={finishIntro}>Got it!</button>
+          ) : status === 'answer' ? (
             <button className="btn btn-primary" disabled={!canCheck} onClick={check}>Check</button>
+          ) : status === 'wrong' ? (
+            <div className="foot-actions">
+              <button className="btn btn-retry" onClick={retry}>Try again</button>
+              <button className="btn btn-danger" autoFocus onClick={next}>Continue</button>
+            </div>
           ) : (
-            <button className={`btn ${status === 'correct' ? 'btn-success' : 'btn-danger'}`} autoFocus onClick={next}>Continue</button>
+            <button className="btn btn-success" autoFocus onClick={next}>Continue</button>
           )}
         </div>
       </footer>

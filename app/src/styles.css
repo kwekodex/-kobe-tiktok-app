@@ -483,9 +483,29 @@ h1, h2, h3 { margin: 0 0 .5rem; font-weight: 900; }
 .tile .reading { font-size: .68rem; margin-top: 1px; }
 .tile-ghost .reading { color: transparent; }
 .tile { display: inline-flex; flex-direction: column; align-items: center; }
-.card-option .reading { font-size: .8rem; }
+.card-option .reading { font-size: .8rem; overflow-wrap: anywhere; text-align: center; }
 .match-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 78px; }
 .match-btn .reading { font-size: .74rem; }
 .match-btn.on .reading { color: inherit; opacity: .8; }
 .reading.on-feedback { color: inherit; opacity: .8; font-size: .9rem; }
 .speak-sentence .reading { font-size: .85rem; margin-top: 2px; }
+
+/* new-words intro + try again */
+.intro-list { display: flex; flex-direction: column; gap: 10px; }
+.intro-card {
+  display: grid; grid-template-columns: 52px 1fr auto auto; align-items: center; gap: 12px; text-align: left; font: inherit; color: var(--ink);
+  border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 16px; padding: 10px 14px; background: var(--surface); cursor: pointer;
+}
+.intro-card:active { transform: translateY(2px); border-bottom-width: 2px; }
+.intro-emoji { font-size: 2.2rem; text-align: center; }
+.intro-word strong { display: block; font-size: 1.2rem; }
+.intro-en { color: var(--ink-soft); font-weight: 800; text-align: right; }
+.intro-play { font-size: 1.1rem; opacity: .7; }
+.foot-actions { display: flex; gap: 10px; }
+.btn-retry { background: var(--surface); color: var(--danger); border: 2px solid var(--danger); box-shadow: 0 4px 0 var(--danger); }
+@media (max-width: 640px) {
+  .lesson-foot.wrong .foot-inner { flex-wrap: wrap; gap: 12px; }
+  .lesson-foot.wrong .feedback { width: 100%; }
+  .foot-actions { width: 100%; }
+  .foot-actions .btn { flex: 1; }
+}

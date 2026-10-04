@@ -64,6 +64,7 @@ export function buildLessonSession(course, lesson) {
   const s = (i) => sents[i % sents.length];
 
   return [
+    { type: 'intro', key: `intro:${lesson.id}`, words: lesson.words },
     b.select(w(0), poolW),
     b.select(w(1), poolW),
     b.tilesExercise(s(0), 't', poolS),
