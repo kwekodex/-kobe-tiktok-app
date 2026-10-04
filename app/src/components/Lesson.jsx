@@ -237,7 +237,8 @@ export default function Lesson({ session, onExit }) {
           {ex.type === 'intro' ? (
             <button className="btn btn-primary" autoFocus onClick={finishIntro}>Got it!</button>
           ) : status === 'answer' ? (
-            <button className="btn btn-primary" disabled={!canCheck} onClick={check}>Check</button>
+            // Speaking is checked automatically once Kobe hears you.
+            ex.type === 'speak' ? null : <button className="btn btn-primary" disabled={!canCheck} onClick={check}>Check</button>
           ) : status === 'wrong' ? (
             <div className="foot-actions">
               <button className="btn btn-retry" onClick={retry}>Try again</button>
